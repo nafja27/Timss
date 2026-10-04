@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>جزيرة التحدي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sea:#0B6E8A; --deep:#0A4A63; --lagoon:#3CC6CB; --sand:#FFDFA0; --sand-dark:#E9B864;
+  --coral:#FF5D73; --sun:#FFC23D; --leaf:#22B573; --violet:#7B5CFF; --ink:#16324F; --blue:#1FA2C6;
+  --display:"Baloo Bhaijaan 2","Tajawal",Tahoma,sans-serif;
+  --body:"Tajawal",Tahoma,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--body);color:var(--ink);min-height:100vh;overflow-x:hidden;
+  background:radial-gradient(ellipse at 50% 40%,#1591AE 0%,var(--sea) 45%,var(--deep) 100%) fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='26'%3E%3Cpath d='M0 13 Q22 1 45 13 T90 13' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E")}
+[hidden]{display:none!important}
+button{font-family:inherit}
+:focus-visible{outline:4px solid #fff;outline-offset:3px}
+.screen{display:none;position:relative;z-index:1;min-height:100vh}
+.screen.active{display:block}
+
+.btn{font-family:var(--display);font-weight:700;font-size:1.3rem;border:0;border-radius:18px;padding:.55em 1.5em;cursor:pointer;
+  background:var(--sun);color:var(--ink);box-shadow:0 5px 0 #C98F12;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #C98F12}
+.btn.alt{background:#fff;box-shadow:0 5px 0 #B9C7D3}
+.btn.big{font-size:1.7rem;padding:.5em 2em}
+
+.av{--s:48px;width:var(--s);height:var(--s);border-radius:50%;background:color-mix(in srgb,var(--pc) 22%,#fff);
+  border:3px solid var(--pc);display:grid;place-items:center;overflow:hidden;flex:none}
+.av img{width:100%;height:100%;object-fit:contain}
+.av span{font-size:calc(var(--s)*.58);line-height:1}
+.av.sm{--s:42px}.av.lg{--s:110px;border-width:5px}.av.xl{--s:150px;border-width:6px}
+
+/* setup */
+.setup{max-width:1080px;margin:0 auto;padding:26px 20px 48px;color:#fff}
+.brand{text-align:center;margin:6px 0 16px}
+.brand h1{font-family:var(--display);font-weight:800;font-size:clamp(2.8rem,8vw,5.2rem);margin:0;line-height:1.05;color:var(--sun);
+  text-shadow:0 5px 0 var(--deep),0 12px 30px rgba(0,0,0,.25)}
+.brand p{font-size:1.25rem;margin:.4em 0 0}
+.how{background:rgba(255,255,255,.1);border:2px dashed rgba(255,255,255,.4);border-radius:24px;padding:14px 22px;max-width:780px;margin:0 auto 24px;line-height:1.9;font-size:1.08rem}
+.sec{font-family:var(--display);font-size:1.6rem;margin:16px 0 2px}
+.hint{margin:0 0 12px;opacity:.85}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:860px){.pgrid{grid-template-columns:repeat(2,1fr)}}
+.pcard{background:var(--sand);color:var(--ink);border-radius:28px;padding:18px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  border-bottom:9px solid var(--pc);box-shadow:0 10px 0 rgba(0,0,0,.12)}
+.upbtn{position:relative;background:none;border:0;padding:0;cursor:pointer;border-radius:50%}
+.upbtn .cam{position:absolute;bottom:0;left:0;background:#fff;border-radius:50%;width:36px;height:36px;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.2);font-size:1.1rem}
+.pname{width:100%;text-align:center;font-family:var(--display);font-weight:700;font-size:1.4rem;border:2px solid transparent;background:rgba(255,255,255,.6);border-radius:14px;padding:.2em .4em;color:var(--ink)}
+.pname:focus{border-color:var(--pc);outline:none;background:#fff}
+.seg{display:inline-flex;background:rgba(22,50,79,.1);border-radius:999px;padding:4px;gap:4px;flex-wrap:wrap;justify-content:center}
+.seg button{border:0;background:transparent;padding:.4em .95em;border-radius:999px;font-weight:700;font-size:1rem;cursor:pointer;color:var(--ink)}
+.seg button.on{background:var(--ink);color:#fff}
+.settings{display:flex;flex-wrap:wrap;gap:18px 36px;margin-top:6px}
+.settings .lbl{display:block;font-weight:700;margin-bottom:6px;font-size:1.05rem}
+.settings .seg{background:rgba(255,255,255,.14)}
+.settings .seg button{color:#fff}
+.settings .seg button.on{background:var(--sun);color:var(--ink)}
+.linkbtn{background:none;border:0;color:var(--ink);text-decoration:underline;cursor:pointer;font-size:.92rem;opacity:.75;padding:0}
+.startrow{text-align:center;margin-top:30px}
+.err{color:var(--sun);font-weight:700;min-height:1.5em;margin:.6em 0 0}
+
+/* game */
+#s-game{height:100vh;overflow:hidden}
+#stage{position:absolute;inset:0}
+#stage canvas{display:block}
+.topbar{position:absolute;top:10px;inset-inline:12px;z-index:5;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#hud{display:flex;gap:8px;flex:1;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.93);border-radius:999px;padding-block:4px;padding-inline:4px 16px;border:3px solid transparent;transition:transform .2s;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.chip.active{border-color:var(--pc);transform:scale(1.06);box-shadow:0 0 0 4px color-mix(in srgb,var(--pc) 40%,transparent)}
+.chip-txt{display:flex;flex-direction:column;line-height:1.25}
+.chip-txt b{font-family:var(--display);font-size:1.05rem}
+.chip-txt span{font-size:.98rem;font-weight:700;white-space:nowrap}
+.round{color:#fff;background:rgba(22,50,79,.75);border-radius:999px;padding:.2em .9em;font-family:var(--display);font-size:1.2rem;font-weight:700;white-space:nowrap}
+.iconbtn{background:rgba(22,50,79,.75);border:0;border-radius:50%;width:46px;height:46px;font-size:1.3rem;cursor:pointer}
+.dock{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:5;background:rgba(255,255,255,.94);border-radius:28px;padding:10px 22px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:0 10px 30px rgba(0,0,0,.25);width:max-content;max-width:94vw}
+.dock-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+#turnAv .av{--s:58px;border-width:4px}
+.turn-msg{font-family:var(--display);font-weight:700;font-size:1.45rem;min-height:1.5em;line-height:1.4}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 16px;font-size:.92rem;font-weight:700;opacity:.8}
+.legend i{display:inline-block;width:.9em;height:.9em;border-radius:30%;vertical-align:middle;margin-inline-end:.35em}
+
+/* modal */
+#modal{position:fixed;inset:0;background:rgba(8,40,58,.62);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+#modal.show{display:flex}
+.mbox{background:#fff;border-radius:30px;padding:24px;max-width:700px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.35);animation:pop .25s ease-out;text-align:center}
+@keyframes pop{from{transform:scale(.9);opacity:0}}
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700;font-family:var(--display);font-size:1.2rem}
+.qhead .who{display:flex;align-items:center;gap:8px}
+.tag{background:var(--ink);color:#fff;border-radius:999px;padding:.15em .9em}
+.timer{height:10px;background:#E6EEF4;border-radius:99px;overflow:hidden;margin:14px 0}
+.timer i{display:block;height:100%;width:100%;background:var(--leaf);border-radius:99px}
+.qtext{font-family:var(--display);font-weight:700;font-size:clamp(1.45rem,3.3vw,2.1rem);line-height:1.55;margin:.3em 0 .8em}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.opt{font-family:var(--display);font-weight:700;font-size:1.4rem;background:var(--sand);border:3px solid transparent;border-radius:18px;padding:.65em .5em;cursor:pointer;color:var(--ink);box-shadow:0 4px 0 var(--sand-dark)}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt.correct{background:var(--leaf);color:#fff;box-shadow:0 4px 0 #168A56}
+.opt.wrong{background:var(--coral);color:#fff;box-shadow:0 4px 0 #C43A4D}
+.qfeed{font-weight:700;font-size:1.25rem;min-height:1.5em;margin:.8em 0 0}
+.banner-ic{font-size:4.6rem;line-height:1.2}
+.banner-t{font-family:var(--display);font-size:1.9rem;font-weight:800;margin:.2em 0;line-height:1.5}
+.mrow{display:flex;gap:14px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+
+/* mini games */
+.mini{max-width:1120px;margin:0 auto;padding:14px 14px 22px;display:flex;flex-direction:column;gap:12px;min-height:100vh}
+.mini-top{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#fff;flex-wrap:wrap}
+.mini-name{display:flex;align-items:center;gap:10px}
+.mini-name h2{font-family:var(--display);font-size:1.9rem;margin:0}
+#miniIcon{font-size:2.1rem}
+.mini-player{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:1.35rem}
+.mini-stats{display:flex;gap:10px}
+.mini-stats div{background:#fff;color:var(--ink);border-radius:16px;padding:.25em .9em;font-weight:700;font-size:1.1rem}
+.mini-stats b{font-family:var(--display);font-size:1.7rem;margin-inline-start:.3em}
+#s-mini.intro .mini-stats,#s-mini.intro .mini-player{visibility:hidden}
+.arena{flex:1;position:relative;overflow:hidden;background:rgba(255,255,255,.96);border-radius:32px;padding:22px;min-height:68vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.intro-box{display:flex;flex-direction:column;align-items:center;gap:6px}
+.intro-ic{font-size:5rem;line-height:1.2}
+.intro-box h2{font-family:var(--display);font-size:2.5rem;margin:.1em 0;line-height:1.3}
+.intro-box p{font-size:1.3rem;max-width:580px;margin:.2em auto .8em;line-height:1.7}
+.rule{font-family:var(--display);font-weight:700;font-size:1.7rem;background:var(--ink);color:#fff;border-radius:18px;padding:.2em 1.1em;margin:0 0 16px;position:relative;z-index:3}
+.arena.g-balloon{justify-content:flex-start}
+.balloon{position:absolute;bottom:-160px;width:124px;height:142px;border:0;border-radius:50% 50% 46% 46%/55% 55% 45% 45%;
+  background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.55),transparent 34%),var(--bc);color:#fff;font-family:var(--display);font-weight:800;
+  font-size:1.2rem;line-height:1.25;padding:10px;cursor:pointer;animation:rise 6s linear forwards;text-shadow:0 2px 3px rgba(0,0,0,.35);
+  transition:scale .25s,opacity .25s}
+.balloon::after{content:"";position:absolute;top:100%;left:50%;width:2px;height:42px;background:rgba(22,50,79,.35)}
+@keyframes rise{to{transform:translateY(calc(-1 * var(--h,800px)))}}
+.balloon.popped{animation-play-state:paused;scale:1.6;opacity:0}
+.balloon.bad{animation-play-state:paused;filter:grayscale(1);opacity:0}
+.sort-card{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,6vw,3.6rem);background:var(--sand);border-radius:26px;padding:.4em 1.2em;min-width:280px;margin:8px 0 30px;box-shadow:0 8px 0 var(--sand-dark)}
+.sort-card.pop{animation:pop .2s}
+.sort-card.ok{background:var(--leaf);color:#fff;box-shadow:0 8px 0 #168A56}
+.sort-card.no{background:var(--coral);color:#fff;box-shadow:0 8px 0 #C43A4D}
+.bins{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.bin{font-family:var(--display);font-weight:800;font-size:1.6rem;border:0;border-radius:22px;padding:.9em 1.4em;min-width:190px;cursor:pointer;color:#fff;background:var(--ink);box-shadow:0 6px 0 #0A1C2E}
+.bin:nth-child(2){background:var(--blue);box-shadow:0 6px 0 #147592}
+.bin:nth-child(3){background:var(--violet);box-shadow:0 6px 0 #5639CC}
+.bin:active{transform:translateY(4px)}
+.tf-st{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4.6vw,2.8rem);line-height:1.5;margin:0 0 30px;max-width:820px}
+.tf-btns{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.tfb{font-family:var(--display);font-weight:800;font-size:2.1rem;border:0;border-radius:24px;padding:.5em 1.6em;cursor:pointer;color:#fff}
+.tfb.yes{background:var(--leaf);box-shadow:0 7px 0 #168A56}.tfb.no{background:var(--coral);box-shadow:0 7px 0 #C43A4D}
+.tfb:disabled{opacity:.55;cursor:default}
+.mem{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:min(840px,100%)}
+.mcard{position:relative;min-height:92px;border:0;border-radius:18px;cursor:pointer;font-family:var(--display);font-weight:700;font-size:clamp(1rem,2.2vw,1.4rem);padding:8px;background:var(--ink);color:#fff;line-height:1.35}
+.mcard .face{display:none}
+.mcard .back{font-size:2.2rem;color:var(--sun)}
+.mcard.up .back{display:none}.mcard.up .face{display:block}
+.mcard.up{background:var(--sand);color:var(--ink)}
+.mcard.up:has(.s1){background:#C8F0F1}
+.mcard.matched{background:var(--leaf)!important;color:#fff}
+.timeup{position:absolute;inset:0;background:rgba(255,255,255,.9);display:grid;place-items:center;font-family:var(--display);font-size:2.5rem;font-weight:800;z-index:10}
+.res-list{width:min(660px,100%);display:flex;flex-direction:column;gap:10px;margin:10px 0 24px}
+.res-row{display:flex;align-items:center;gap:14px;background:var(--sand);border-radius:20px;padding:8px 16px;font-family:var(--display);font-size:1.35rem;font-weight:700}
+.res-row .place{width:40px;font-size:1.7rem}
+.res-row .nm{flex:1;text-align:start}
+.res-row .pz{color:#7A4E00}
+
+/* end */
+.end{text-align:center;color:#fff;padding:30px 16px;max-width:900px;margin:0 auto}
+.end h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,7vw,4.4rem);margin:0;color:var(--sun);text-shadow:0 5px 0 var(--deep)}
+.end .sub{font-family:var(--display);font-size:1.8rem;margin:.2em 0 0}
+.podium{display:flex;justify-content:center;align-items:flex-end;gap:14px;margin:30px auto}
+.pod{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;max-width:190px}
+.pod .blk{width:100%;background:var(--sand);color:var(--ink);border-radius:18px 18px 6px 6px;font-family:var(--display);font-weight:800;font-size:2.2rem;display:grid;place-items:center}
+.pod.p1 .blk{height:170px;background:var(--sun)}.pod.p2 .blk{height:120px}.pod.p3 .blk{height:90px}.pod.p4 .blk{height:60px}
+.pod .nm{font-family:var(--display);font-size:1.35rem;font-weight:700}
+.pod .sc{font-weight:700;display:flex;gap:12px}
+.float{position:fixed;z-index:40;font-family:var(--display);font-weight:800;font-size:1.7rem;pointer-events:none;animation:floatUp 1.1s ease-out forwards;text-shadow:0 2px 0 #fff,0 0 6px #fff}
+@keyframes floatUp{to{transform:translateY(-60px);opacity:0}}
+.conf{position:fixed;top:-20px;width:12px;height:18px;border-radius:3px;z-index:30;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@media (prefers-reduced-motion:reduce){
+  .float,.mbox,.sort-card.pop,.conf{animation:none!important}
+  .conf{display:none}
+}
+
+.home{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:24px;gap:10px}
+.logo{font-family:var(--display);font-weight:800;font-size:clamp(3rem,10vw,6rem);margin:0;color:var(--sun);text-shadow:0 6px 0 var(--deep),0 14px 30px rgba(0,0,0,.25);line-height:1.05}
+.tag-line{font-size:1.3rem;margin:0 0 20px}
+.home-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.demo-note{max-width:580px;background:rgba(255,255,255,.14);border-radius:16px;padding:10px 16px;margin-top:24px;line-height:1.8}
+.panel{max-width:780px;margin:5vh auto;background:#fff;border-radius:32px;padding:28px 24px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.panel h2{font-family:var(--display);font-size:2.1rem;margin:.1em 0 .3em;line-height:1.3}
+.muted{opacity:.75;font-size:1.1rem;margin:0 0 14px;line-height:1.7}
+.big-in{font-family:var(--display);font-size:2rem;text-align:center;width:min(360px,100%);border:3px solid #D5E0E8;border-radius:18px;padding:.3em;direction:ltr}
+.big-in:focus{border-color:var(--sea);outline:none}
+.names{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:10px 0 20px}
+.name-btn{font-family:var(--display);font-weight:700;font-size:1.4rem;border:0;border-radius:18px;padding:.7em .4em;background:var(--sand);color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--sand-dark)}
+.dots{display:flex;gap:14px;justify-content:center;margin:8px 0;direction:ltr}
+.dots i{width:22px;height:22px;border-radius:50%;border:3px solid var(--ink)}
+.dots i.on{background:var(--ink)}
+.keys{display:grid;grid-template-columns:repeat(3,84px);gap:12px;justify-content:center;margin-top:10px;direction:ltr}
+.key{font-family:var(--display);font-weight:800;font-size:2rem;height:72px;border:0;border-radius:20px;background:var(--sand);color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--sand-dark)}
+.key.alt{font-size:1.1rem;background:#E6EEF4;box-shadow:0 5px 0 #C0CCD6}
+.key:active{transform:translateY(3px)}
+.tprog{height:12px;background:#E6EEF4;border-radius:99px;overflow:hidden;margin:10px 0 4px}
+.tprog i{display:block;height:100%;background:var(--sea);border-radius:99px;transition:width .3s}
+.tcount{font-weight:700;opacity:.7}
+.lobby{max-width:1100px;margin:0 auto;padding:22px 18px 40px;color:#fff}
+.lobby-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.lobby-top h2{font-family:var(--display);font-size:2rem;margin:0}
+.notice{background:var(--sun);color:var(--ink);border-radius:20px;padding:12px 18px;margin:14px 0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-weight:700;font-size:1.1rem}
+.who{font-family:var(--display);font-size:1.35rem;font-weight:700;text-align:center}
+.chrow{display:flex;align-items:center;gap:8px}
+.arrow{border:0;background:rgba(22,50,79,.1);border-radius:50%;width:40px;height:40px;font-size:1.1rem;cursor:pointer}
+.chname{font-size:.95rem;opacity:.75}
+.item-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:14px}
+.item-btn{display:flex;flex-direction:column;align-items:center;gap:4px;border:3px solid transparent;border-radius:20px;background:var(--sand);padding:12px;cursor:pointer;font-family:var(--display);font-weight:700;font-size:1.15rem;color:var(--ink)}
+.item-btn span{font-size:2.4rem;line-height:1.2}
+.item-btn small{font-family:var(--body);font-weight:500;font-size:.92rem;opacity:.85;line-height:1.5}
+.item-btn:disabled{opacity:.45;cursor:default}
+.item-btn:hover:not(:disabled){border-color:var(--ink)}
+.mbox.wide{max-width:960px;max-height:90vh;overflow:auto;text-align:start}
+.dash{max-width:1200px;margin:0 auto;padding:18px 16px 50px}
+.dcard{background:#fff;border-radius:24px;padding:18px 20px;margin-bottom:16px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.dcard h3{font-family:var(--display);font-size:1.5rem;margin:0 0 10px}
+.dhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#fff;margin-bottom:12px}
+.dhead h1{font-family:var(--display);font-size:2.2rem;margin:0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{border:0;border-radius:999px;padding:.4em 1.1em;font-weight:700;font-size:1.05rem;cursor:pointer;background:rgba(255,255,255,.2);color:#fff}
+.tabs button.on{background:var(--sun);color:var(--ink)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.sbtn{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:14px;padding:.4em .9em;font-weight:700;font-size:1rem;cursor:pointer;font-family:var(--body)}
+.sbtn.on{background:var(--leaf);border-color:var(--leaf);color:#fff}
+.sbtn.danger{border-color:var(--coral);color:#C43A4D}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--sand);border-radius:18px;padding:12px 14px}
+.kpi b{display:block;font-family:var(--display);font-size:2rem;line-height:1.2}
+.kpi span{font-weight:700;opacity:.75}
+.dom{display:grid;grid-template-columns:170px 1fr;gap:6px 12px;align-items:center;margin:10px 0}
+.dom .lbl{font-weight:700}
+.bars{display:flex;flex-direction:column;gap:3px}
+.bar{height:16px;border-radius:8px;background:#EEF3F7;position:relative;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;right:0;border-radius:8px}
+.bar em{position:absolute;left:6px;top:0;font-style:normal;font-size:.8rem;font-weight:700;line-height:16px}
+.klegend{display:flex;gap:14px;font-weight:700;font-size:.95rem;margin-bottom:6px;flex-wrap:wrap}
+.klegend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:middle;margin-inline-end:4px}
+.twrap{overflow-x:auto}
+table.st{width:100%;border-collapse:collapse;font-size:1rem}
+table.st th{text-align:start;padding:8px;border-bottom:2px solid var(--ink);font-size:.95rem;white-space:nowrap}
+table.st td{padding:8px;border-bottom:1px solid #E6EEF4}
+table.st tr.row{cursor:pointer}
+table.st tr.row:hover,table.st tr.sel{background:#FFF6E0}
+.gup{color:#0E7C3A;font-weight:800}.gdown{color:#C43A4D;font-weight:800}
+.chipk{display:inline-block;background:#FFE3E8;color:#8A1F30;border-radius:999px;padding:.1em .6em;font-size:.85rem;font-weight:700;margin:2px}
+.cards-print{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.lcard{border:2px dashed var(--ink);border-radius:14px;padding:12px;text-align:center;line-height:1.7}
+.lcard b{font-family:var(--display);font-size:1.4rem;display:block}
+textarea.names-in{width:100%;min-height:150px;font-family:var(--body);font-size:1.1rem;border:2px solid #D5E0E8;border-radius:14px;padding:10px}
+.in{font-size:1.1rem;border:2px solid #D5E0E8;border-radius:12px;padding:.35em .6em;font-family:var(--body)}
+.charlist{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}
+.charlist div{display:flex;flex-direction:column;align-items:center;gap:4px}
+@media print{body{background:#fff!important}body::before{display:none}body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;top:0;left:0;right:0}.noprint{display:none!important}}
+
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 .12em;font-size:.92em}
+.fr>span:first-child{border-bottom:.09em solid currentColor;padding:0 .2em .05em}
+.fr>span:last-child{padding-top:.05em}
+.opt{display:flex;align-items:center;justify-content:center;gap:.4em;flex-wrap:wrap}
+.oe{font-size:1.6em;line-height:1}
+.opt.picked{background:var(--sea);color:#fff;box-shadow:0 4px 0 var(--deep);transform:scale(1.03)}
+.vis{max-width:360px;margin:4px auto 6px}.vis svg{width:100%;height:auto;display:block}
+.vis-emoji{font-size:4.2rem;line-height:1.25;margin:2px 0 4px}
+.moonrow{font-size:2.6rem;letter-spacing:.1em}
+.picto{display:inline-flex;flex-direction:column;gap:8px;background:#FFF6E0;border:3px solid var(--sand-dark);border-radius:18px;padding:12px 18px;margin:4px auto 8px}
+.prow{display:flex;align-items:center;gap:14px;font-size:2.1rem}.prow b{font-family:var(--display);font-size:1.3rem}
+.pkey{font-weight:700;border-top:2px dashed var(--sand-dark);padding-top:6px;font-size:1.15rem}
+.chain{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 10px;flex-wrap:wrap}
+.chain div{display:flex;flex-direction:column;align-items:center;background:#E8F7EC;border-radius:18px;padding:8px 14px}
+.chain div span{font-size:3rem;line-height:1.2}.chain b{font-family:var(--display);font-size:1.2rem}.chain i{font-style:normal;font-size:2rem;color:var(--leaf)}
+.pv{display:inline-flex;gap:6px;margin:4px 0 10px}.pv span{font-family:var(--display);font-weight:800;font-size:2.6rem;width:1.5em;height:1.6em;display:grid;place-items:center;background:#E6EEF4;border-radius:12px}
+.pv span.on{background:var(--sun);box-shadow:0 0 0 4px var(--coral)}
+.trip{display:flex;align-items:center;gap:4px;margin:0 0 12px}
+.trip i{flex:1;height:10px;border-radius:99px;background:#DCE8F0;position:relative;font-style:normal}
+.trip i.done{background:var(--lagoon)}
+.trip i:not(:empty){background:var(--sun);height:14px}
+.trip i:not(:empty)::after{content:"⛵";position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-size:1.6rem;animation:bob 1.6s ease-in-out infinite}
+.trip i{color:transparent;font-size:0}
+.trip b{font-size:1.6rem}
+.narr{display:flex;align-items:center;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:4px}
+.mascot{font-size:2.4rem;animation:bob 2s ease-in-out infinite;display:inline-block}
+.bubble{background:#E8F7FA;border:2px solid var(--lagoon);border-radius:18px;padding:.25em .9em;font-weight:700;font-size:1.1rem}
+.say{border:0;background:var(--sun);border-radius:50%;width:48px;height:48px;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 0 #C98F12}
+.say:active{transform:translateY(3px)}
+.qhead .say{width:40px;height:40px;font-size:1.1rem}
+
+.credits{margin-top:26px;background:rgba(255,255,255,.95);color:var(--ink);border-radius:22px;padding:14px 26px;box-shadow:0 8px 24px rgba(0,0,0,.18);border-bottom:6px solid var(--sun);display:flex;flex-direction:column;gap:6px;font-size:1.15rem;line-height:1.6}
+.credits span{opacity:.75}.credits b{font-family:var(--display);font-size:1.25rem}
+.credits.small{margin:26px auto 0;width:max-content;max-width:94vw;font-size:1rem;padding:10px 20px}.credits.small b{font-size:1.1rem}
+
+.slots{display:flex;gap:12px;justify-content:center;margin:6px 0 2px}
+.slots span{width:74px;height:74px;border-radius:20px;border:3px dashed #B9C7D3;display:grid;place-items:center;font-size:2.5rem;font-family:var(--display);font-weight:800;color:#B9C7D3}
+.slots span.on{border-style:solid;border-color:var(--sea);background:#E8F7FA;color:inherit}
+.pics{display:grid;grid-template-columns:repeat(3,100px);gap:12px;justify-content:center;margin:6px 0 4px}
+.pic{height:92px;font-size:3.1rem;border:0;border-radius:22px;background:var(--sand);box-shadow:0 5px 0 var(--sand-dark);cursor:pointer}
+.pic:active{transform:translateY(3px)}
+.pinpics{font-size:1.2rem;letter-spacing:.1em}
+.lc-top{font-weight:700;opacity:.8}.lc-row{display:flex;align-items:center;gap:10px;justify-content:center;margin:4px 0}
+.qr svg{width:112px;height:112px;display:block}.lc-lbl{font-size:.85rem;opacity:.75;margin-top:4px}.lc-pics{font-size:2rem;letter-spacing:.12em}
+.lcard small{display:block;font-size:.8rem;opacity:.8}
+@media print{.cards-print{grid-template-columns:repeat(3,1fr)}.lcard{break-inside:avoid}}
+.panel .err{color:#C43A4D}
+
+.school-logo{background:#fff;border-radius:28px;padding:12px 18px;box-shadow:0 10px 30px rgba(0,0,0,.22);margin-bottom:8px;border-bottom:6px solid #D4A73F}
+.school-logo img{display:block;height:min(200px,24vh);width:auto}
+.end-logo{display:block;height:110px;margin:0 auto 10px;background:#fff;border-radius:20px;padding:8px 10px;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.dash-logo{height:52px;vertical-align:middle;background:#fff;border-radius:12px;padding:3px 5px;margin-inline-end:10px}
+.lc-top{display:flex;align-items:center;justify-content:center;gap:8px}.card-logo{height:42px}
+
+.home-login{margin:18px auto 0;max-width:440px;width:100%;padding:22px 24px;text-align:start;color:var(--ink)}
+.home-login h2{text-align:center;font-size:1.7rem}
+.lform{display:flex;flex-direction:column;gap:12px}
+.lform label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:1.05rem}
+.big-field{font-size:1.35rem;padding:.45em .7em;width:100%;font-family:var(--display)}
+.pw{position:relative;display:block}.pw .eye{position:absolute;left:8px;top:50%;transform:translateY(-50%);border:0;background:none;font-size:1.3rem;cursor:pointer}
+.muted.small{font-size:.92rem;text-align:center;margin:10px 0 0}
+.home-login .err,.mbox .err{color:#C43A4D;min-height:1.3em;margin:0}
+.grid-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;align-items:end}
+.grid-form.one{grid-template-columns:1fr}
+.grid-form label{display:flex;flex-direction:column;gap:5px;font-weight:700}.grid-form small{font-weight:500;opacity:.7}
+.grid-form .in,.grid-form select{width:100%}
+.or{text-align:center;font-weight:800;opacity:.6}
+.who-chip{background:#fff;border-radius:999px;padding:.35em .9em;font-weight:700;color:var(--ink)}.who-chip small{opacity:.65;margin-inline-start:4px}
+.rowacts{white-space:nowrap}.ib{border:0;background:#EEF3F7;border-radius:10px;width:34px;height:34px;cursor:pointer;font-size:1rem;margin:1px}
+.ib:hover{background:var(--sand)}
+tr.off td{opacity:.5}
+code{background:#EEF3F7;border-radius:6px;padding:.05em .35em;font-size:.95em}
+.lc-cred{line-height:1.5;font-size:.9rem;text-align:start}.lc-cred code{font-size:1.05rem;font-weight:700;display:inline-block;margin-bottom:2px}
+</style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<section class="screen active" id="s-home">
+  <div class="home">
+    <div class="school-logo"><img id="schoolLogo" src="data:image/webp;base64,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" alt="شعار مدرسة المأمون الابتدائية للبنين"></div>
+    <h1 class="logo">جزيرة التحدي</h1>
+    <p class="tag-line">لعبة لوحية في العلوم والرياضيات للصف الرابع</p>
+    <div class="panel home-login" id="homeLogin"></div>
+    <div class="credits"><div><span>إعداد القائم بأعمال مدير مساعد:</span> <b>أ. نافجة الحامد</b></div><div><span>مديرة المدرسة:</span> <b>أ. عايدة الدوسري</b></div></div>
+    <p class="demo-note" id="demoNote" hidden>وضع التجربة: البيانات تُحفظ مؤقتًا حتى إغلاق الصفحة.<br>طالب: <b dir="ltr">ahmad / 1111</b> — معلم: <b dir="ltr">teacher / 2468</b> — مدير النظام: <b dir="ltr">admin / admin1234</b></p>
+  </div>
+</section>
+<section class="screen" id="s-login"><div class="panel" id="loginPanel"></div></section>
+<section class="screen" id="s-test"><div class="panel" id="testPanel"></div></section>
+<section class="screen" id="s-lobby"><div class="lobby" id="lobbyPanel"></div></section>
+<section class="screen" id="s-teacher"><div class="dash" id="dash"></div></section>
+
+<section class="screen" id="s-game">
+  <div id="stage"></div>
+  <div class="topbar">
+    <div id="hud"></div>
+    <div class="round" id="roundInfo"></div>
+    <button class="iconbtn" id="musicBtn" aria-label="الموسيقى">🎵</button>
+    <button class="iconbtn" id="soundBtn" aria-label="الصوت">🔊</button>
+  </div>
+  <div class="dock">
+    <div class="dock-row"><div id="turnAv"></div><div class="turn-msg" id="turnMsg" aria-live="polite"></div><button class="btn" id="rollBtn" hidden>🎲 رمي النرد</button></div>
+    <div class="legend" id="legend"></div>
+  </div>
+</section>
+
+<section class="screen" id="s-mini">
+  <div class="mini">
+    <div class="mini-top">
+      <div class="mini-name"><span id="miniIcon"></span><h2 id="miniTitle"></h2></div>
+      <div class="mini-player" id="miniPlayer"></div>
+      <div class="mini-stats"><div>النقاط<b id="miniScore">0</b></div><div>⏱<b id="miniTime">0</b></div></div>
+    </div>
+    <div class="arena" id="arena"></div>
+  </div>
+</section>
+
+<section class="screen" id="s-end">
+  <div class="end">
+    <img class="end-logo" data-logo alt="شعار مدرسة المأمون الابتدائية للبنين">
+    <h1>انتهت الرحلة!</h1>
+    <p class="sub" id="winner"></p>
+    <div class="podium" id="podium"></div>
+    <button class="btn big" id="againBtn">العودة إلى الغرفة</button>
+    <div class="credits small"><div><span>إعداد القائم بأعمال مدير مساعد:</span> <b>أ. نافجة الحامد</b></div><div><span>مديرة المدرسة:</span> <b>أ. عايدة الدوسري</b></div></div>
+  </div>
+</section>
+
+<div id="modal" role="dialog" aria-modal="true"><div class="mbox" id="mbox"></div></div>
+<script>
+/* ===== المجالات والمهارات (TIMSS الصف الرابع) ===== */
+const SK={whole:'number',place:'number',fraction:'number',pattern:'number',shapes:'geometry',measure:'geometry',data:'data',
+  organisms:'life',lifecycle:'life',ecosystem:'life',health:'life',matter:'physical',energy:'physical',forces:'physical',earthsurface:'earth',space:'earth'};
+const DOMAINS=[['number','الأعداد','m'],['geometry','القياس والهندسة','m'],['data','البيانات','m'],['life','علوم الحياة','s'],['physical','العلوم الفيزيائية','s'],['earth','علوم الأرض','s']];
+const SKILLS={whole:'العمليات على الأعداد',place:'القيمة المنزلية والتقريب',fraction:'الكسور والأعداد العشرية',pattern:'الأنماط والعبارات',shapes:'الأشكال الهندسية',measure:'القياس',data:'قراءة البيانات',
+  organisms:'خصائص الكائنات الحية',lifecycle:'دورات الحياة',ecosystem:'السلاسل الغذائية والبيئة',health:'صحة الإنسان',matter:'المادة وخصائصها',energy:'الطاقة والضوء والكهرباء',forces:'القوى والمغناطيس',earthsurface:'سطح الأرض وموارده',space:'الأرض والفضاء'};
+
+/* ===== الاختبار القبلي (A) والبعدي (B): صيغتان متكافئتان ===== */
+const TQ=(id,k,q,a,o,v)=>({id,k,s:['life','physical','earth'].includes(SK[k])?'s':'m',q,a,o,v});
+const TEST_A=[
+ TQ('A01','whole','اصطاد صيادو الجزيرة 456 سمكة في الصباح و327 سمكة في المساء. كم سمكة اصطادوا في اليوم كله؟','783',['773','683','793'],{t:'emoji',e:'🎣🐟'}),
+ TQ('A02','whole','خبزت الجدة 72 كعكة ووزّعتها بالتساوي على 8 صناديق. كم كعكة في كل صندوق؟','9',['8','7','12'],{t:'emoji',e:'👵🧁📦'}),
+ TQ('A03','place','على باب صندوق الكنز الرقم 3748. ما قيمة الرقم 7 فيه؟','700',['7','70','7000'],{t:'place',n:'3748',i:1,e:'🧰'}),
+ TQ('A04','fraction','قُسّمت فطيرة إلى 8 قطع متساوية، وأكل خالد القطع الملوّنة. ما الكسر الذي يمثل ما أكله خالد؟','3/8',['8/3','3/5','5/8'],{t:'pizza',n:8,sh:3}),
+ TQ('A05','pattern','يقفز الضفدع على الحجارة بهذا النمط. على أي عدد سيقفز في المكان المفقود؟','20',['16','30','18'],{t:'pattern',seq:[5,10,15,null,25],e:'🐸'}),
+ TQ('A06','shapes','صنع راشد طائرة ورقية على شكل خماسي. كم ضلعًا للشكل الخماسي؟','5',['4','6','8'],{t:'emoji',e:'🪁'}),
+ TQ('A07','measure','حديقة زهور مستطيلة طولها 6 م وعرضها 4 م. نريد وضع سياج حولها. كم مترًا من السياج نحتاج؟','20 م',['24 م','10 م','12 م'],{t:'rect',w:6,h:4,u:'م',e:'🌷'}),
+ TQ('A08','measure','بدأ حفل المدرسة وانتهى في الوقتين المبيّنين: من 8:15 إلى 9:00. كم دقيقة استمر الحفل؟','45',['35','60','85'],{t:'clocks',a:[8,15],b:[9,0]}),
+ TQ('A09','data','عدّ الطلاب الفواكه في سلة الرحلة. بكم يزيد عدد الموز على عدد البرتقال؟','5',['13','3','4'],{t:'bars',rows:[['تفاح','🍎',6],['موز','🍌',9],['برتقال','🍊',4]]}),
+ TQ('A10','data','في لوحة الصور، كل 🍎 يمثل تفاحتين. كم تفاحة جمع سلمان؟','10',['5','7','25'],{t:'picto',rows:[['سلمان',5]],e:'🍎',per:2}),
+ TQ('A11','organisms','على شاطئ الجزيرة حيوانات كثيرة. أي منها من الزواحف؟','السلحفاة',['الحوت','الحمامة','الضفدع'],{t:'emoji',e:'🏝️'}),
+ TQ('A12','lifecycle','نريد أن نروي قصة حياة الضفدع من البداية. ما أول مرحلة فيها؟','البيضة',['الشرغوف','الضفدع الصغير','الضفدع البالغ'],{t:'emoji',e:'🐸📖'}),
+ TQ('A13','ecosystem','انظر إلى هذه السلسلة الغذائية. أي كائن هو المُنتِج؟','النبات',['الأرنب','الثعلب','الماء'],{t:'chain',items:[['🌿','نبات'],['🐇','أرنب'],['🦊','ثعلب']]}),
+ TQ('A14','health','يريد حمد أن يبني عضلات قوية لسباق الجري. أي غذاء غني بالبروتين؟','السمك',['الحلوى','المشروبات الغازية','رقائق البطاطس'],{t:'emoji',e:'🏃‍♂️💪'}),
+ TQ('A15','matter','وضع عيسى كوب ماء في المجمّد طوال الليل. ماذا حدث للماء في الصباح؟','تجمّد وأصبح صلبًا',['تبخّر','غلى','أصبح غازًا'],{t:'emoji',e:'🥛➡️🧊'}),
+ TQ('A16','matter','رمينا هذه الأشياء في بركة الماء. أي منها سيطفو على السطح؟','قطعة خشب',['مسمار حديد','حجر','قطعة نقود معدنية'],{t:'emoji',e:'🌊'}),
+ TQ('A17','energy','أي من هذه الأشياء يحوّل الطاقة الكهربائية إلى ضوء؟','المصباح الكهربائي',['الملعقة','الكتاب','الكرسي'],{t:'emoji',e:'🔌⚡'}),
+ TQ('A18','forces','قرّبنا القطب الشمالي لمغناطيس من القطب الشمالي لمغناطيس آخر. ماذا سيحدث؟','يتنافران',['يتجاذبان','لا يحدث شيء','ينصهران'],{t:'magnets'}),
+ TQ('A19','earthsurface','أي من هذه الموارد نستخرجه من باطن الأرض؟','النفط',['الخشب','القطن','الصوف'],{t:'emoji',e:'⛏️🌍'}),
+ TQ('A20','space','رحلة الأرض حول الشمس! كم يومًا تقريبًا تحتاج الأرض لتكمل دورة كاملة؟','365 يومًا',['30 يومًا','7 أيام','يوم واحد'],{t:'orbit'}),
+];
+const TEST_B=[
+ TQ('B01','whole','جمع الطلاب 538 صدفة يوم السبت و264 صدفة يوم الأحد. كم صدفة جمعوا في اليومين؟','802',['792','702','812'],{t:'emoji',e:'🐚🐚'}),
+ TQ('B02','whole','عند جاسم 63 قطعة بسكويت وزّعها بالتساوي على 7 أصدقاء. كم قطعة أخذ كل صديق؟','9',['8','7','56'],{t:'emoji',e:'🍪👬'}),
+ TQ('B03','place','على باب المنارة الرقم 5421. ما قيمة الرقم 4 فيه؟','400',['4','40','4000'],{t:'place',n:'5421',i:1,e:'🗼'}),
+ TQ('B04','fraction','لوح شوكولاتة فيه 5 قطع متساوية، وأكل حمد القطع الملوّنة. ما الكسر الذي يمثل ما أكله حمد؟','2/5',['5/2','2/3','3/5'],{t:'choc',n:5,sh:2}),
+ TQ('B05','pattern','يقفز الكنغر على الحجارة بهذا النمط. على أي عدد سيقفز في المكان المفقود؟','16',['14','18','24'],{t:'pattern',seq:[4,8,12,null,20],e:'🦘'}),
+ TQ('B06','shapes','خيمة المخيّم على شكل مثلث. كم رأسًا للمثلث؟','3',['4','2','6'],{t:'emoji',e:'⛺'}),
+ TQ('B07','measure','حوض سباحة مربع طول ضلعه 5 م. نريد وضع حبل أعلام حوله. كم مترًا طول الحبل؟','20 م',['25 م','10 م','15 م'],{t:'rect',w:5,h:5,u:'م',e:'🏊'}),
+ TQ('B08','measure','بدأت الرحلة المدرسية وانتهت في الوقتين المبيّنين: من 10:30 إلى 11:15. كم دقيقة استمرت الرحلة؟','45',['35','85','75'],{t:'clocks',a:[10,30],b:[11,15]}),
+ TQ('B09','data','عدّ الطلاب الحيوانات في مزرعة الجزيرة. ما مجموع الحيوانات كلها؟','15',['10','12','7'],{t:'bars',rows:[['قطط','🐱',7],['كلاب','🐶',3],['طيور','🐦',5]]}),
+ TQ('B10','data','في لوحة الصور، كل ⭐ يمثل 5 نجوم. كم نجمة جمع راشد؟','15',['3','8','53'],{t:'picto',rows:[['راشد',3]],e:'⭐',per:5}),
+ TQ('B11','organisms','في بركة الجزيرة حيوانات كثيرة. أي منها من البرمائيات؟','الضفدع',['السحلية','القطة','النسر'],{t:'emoji',e:'🪷'}),
+ TQ('B12','lifecycle','فقست بيضة الدجاجة! ماذا خرج منها؟','كتكوت',['يرقة','شرغوف','فراشة'],{t:'emoji',e:'🥚✨'}),
+ TQ('B13','ecosystem','انظر إلى هذه السلسلة الغذائية. ماذا يأكل الغزال؟','العشب',['الأسد','اللحم','التراب'],{t:'chain',items:[['🌿','عشب'],['🦌','غزال'],['🦁','أسد']]}),
+ TQ('B14','health','لماذا نحتاج إلى النوم الكافي كل ليلة؟','ليرتاح الجسم وينمو',['لنصبح أطول فورًا','لنتوقف عن الأكل','لا نحتاج إليه'],{t:'emoji',e:'😴🌙'}),
+ TQ('B15','matter','نسي سلمان قطعة شوكولاتة في السيارة تحت الشمس الحارة. ماذا حدث لها؟','انصهرت',['تجمّدت','تبخّرت','أصبحت أصلب'],{t:'emoji',e:'🍫☀️🚗'}),
+ TQ('B16','matter','نريد نافذة يدخل منها ضوء الشمس إلى الغرفة. أي مادة نختار؟','الزجاج',['الخشب','الحجر','الكرتون'],{t:'emoji',e:'🏠☀️'}),
+ TQ('B17','energy','على سطح المدرسة ألواح شمسية. ما مصدر الطاقة الذي تستخدمه؟','ضوء الشمس',['الرياح','الماء','النفط'],{t:'emoji',e:'🏫☀️'}),
+ TQ('B18','forces','كرة ساكنة على العشب. ماذا يحدث لها عندما نركلها؟','تتحرك',['تبقى ساكنة','تختفي','تذوب'],{t:'emoji',e:'⚽🦶'}),
+ TQ('B19','earthsurface','ماذا نسمي الماء الذي يسقط من السحب؟','المطر',['التبخر','الرياح','الضباب'],{t:'emoji',e:'☁️💧'}),
+ TQ('B20','space','نرى القمر كل ليلة بشكل مختلف. لماذا؟','لأن الجزء المضاء الذي نراه منه يتغير',['لأن حجم القمر يتغير','لأن السحب تغطيه','لأن القمر يطفئ ضوءه'],{t:'moon'}),
+];
+
+/* ===== صور الإجابات ===== */
+const EMO={'السلحفاة':'🐢','الحوت':'🐋','الحمامة':'🕊️','الضفدع':'🐸','البيضة':'🥚','الشرغوف':'〰️','النبات':'🌿','الأرنب':'🐇','الثعلب':'🦊','الماء':'💧',
+ 'السمك':'🐟','الحلوى':'🍬','المشروبات الغازية':'🥤','رقائق البطاطس':'🍟','تجمّد وأصبح صلبًا':'🧊','تبخّر':'💨','غلى':'♨️','أصبح غازًا':'☁️',
+ 'قطعة خشب':'🪵','مسمار حديد':'🔩','حجر':'🪨','قطعة نقود معدنية':'🪙','المصباح الكهربائي':'💡','الملعقة':'🥄','الكتاب':'📕','الكرسي':'🪑',
+ 'يتنافران':'↔️','يتجاذبان':'🤝','النفط':'🛢️','الخشب':'🪵','القطن':'🌱','الصوف':'🧶','السحلية':'🦎','القطة':'🐱','النسر':'🦅',
+ 'كتكوت':'🐥','يرقة':'🐛','فراشة':'🦋','العشب':'🌿','الأسد':'🦁','اللحم':'🍖','التراب':'🟫','انصهرت':'🫠','تجمّدت':'🧊','تبخّرت':'💨','أصبحت أصلب':'🪨',
+ 'الزجاج':'🪟','الحجر':'🪨','الكرتون':'📦','ضوء الشمس':'☀️','الرياح':'🌬️','النفط ':'🛢️','تتحرك':'⚽','تبقى ساكنة':'🛑','تختفي':'🫥','تذوب':'💧',
+ 'المطر':'🌧️','التبخر':'♨️','الضباب':'🌫️','القلب':'❤️','الرئتان':'🫁','الدماغ':'🧠','الجمل':'🐫','الذئب':'🐺','الصقر':'🦅','سمك القرش':'🦈',
+ 'الشمس':'☀️','القمر':'🌙','الأرض':'🌍','المريخ':'🔴','الجذر':'🌱','الزهرة':'🌸','الورقة':'🍃','الثمرة':'🍎','السكر':'🍬','الرمل':'🏖️','الحصى':'🪨','الزيت':'🫒',
+ 'طائر':'🐦','شمس':'☀️','صخرة':'🪨','عشب':'🌿','ميزان الحرارة':'🌡️','المسطرة':'📏','الساعة':'⏰','الخياشيم':'🐟','الأكسجين':'🫧','غسل اليدين بالصابون':'🧼'};
+/* ===== بنك أسئلة اللعبة ===== */
+const MQ=(k,q,a,o)=>({k,s:['life','physical','earth'].includes(SK[k])?'s':'m',q,a,o});
+const MCQ=[
+ MQ('whole','ما ناتج 345 + 278؟','623',['613','523','633']),
+ MQ('whole','ما ناتج 7 × 8؟','56',['54','48','63']),
+ MQ('fraction','أي كسر يساوي نصفًا؟','2/4',['1/3','3/4','2/3']),
+ MQ('place','ما قيمة الرقم 5 في العدد 4052؟','50',['5','500','5000']),
+ MQ('measure','مربع طول ضلعه 6 سم، كم محيطه؟','24 سم',['12 سم','36 سم','18 سم']),
+ MQ('measure','كم دقيقة في ساعتين؟','120',['100','60','200']),
+ MQ('shapes','ما اسم الشكل الذي له 6 أضلاع؟','سداسي',['خماسي','ثماني','رباعي']),
+ MQ('whole','ما ناتج 48 ÷ 6؟','8',['6','7','9']),
+ MQ('place','قرّب العدد 367 إلى أقرب عشرة.','370',['360','400','300']),
+ MQ('pattern','ما العدد التالي في النمط: 3، 7، 11، 15، ...؟','19',['18','20','21']),
+ MQ('whole','في كل علبة 12 قلمًا. كم قلمًا في 3 علب؟','36',['15','32','24']),
+ MQ('fraction','أي عدد هو الأكبر؟','0.7',['0.07','0.5','0.65']),
+ MQ('shapes','كم زاوية قائمة في المستطيل؟','4',['2','3','0']),
+ MQ('pattern','ما العدد المفقود؟ 25 + ☐ = 60','35',['45','25','85']),
+ MQ('measure','مستطيل طوله 5 وحدات وعرضه 3 وحدات. كم مساحته بالوحدات المربعة؟','15',['8','16','10']),
+ MQ('shapes','كم وجهًا للمكعب؟','6',['4','8','12']),
+ MQ('measure','الكيلوغرام الواحد يساوي كم غرامًا؟','1000',['100','10','10000']),
+ MQ('fraction','ما ربع العدد 20؟','5',['4','10','80']),
+ MQ('data','في تمثيل بالصور، كل رمز ☺ يمثل 4 طلاب. كم طالبًا تمثل 3 رموز؟','12',['7','3','16']),
+ MQ('data','جدول الألوان المفضلة: أحمر 8، أزرق 12، أخضر 5. أي لون هو الأكثر؟','أزرق',['أحمر','أخضر','متساوية']),
+ MQ('data','جدول: قرأ علي 4 كتب، وقرأ يوسف 7 كتب. كم كتابًا قرآ معًا؟','11',['3','10','28']),
+ MQ('whole','ما ناتج 600 − 245؟','355',['445','365','245']),
+ MQ('whole','أي عدد من هذه الأعداد زوجي؟','84',['37','51','29']),
+ MQ('measure','الساعة الآن 3:45. كم ستكون الساعة بعد 30 دقيقة؟','4:15',['4:45','3:75','4:00']),
+ MQ('fraction','أي كسر هو الأكبر؟','3/4',['1/4','2/4','1/2']),
+ MQ('measure','قطعة قماش طولها 2 متر. كم طولها بالسنتيمترات؟','200',['20','2000','120']),
+ MQ('whole','اشترى جاسم 4 كتب، ثمن الكتاب 3 دنانير. كم دفع؟','12 دينارًا',['7 دنانير','10 دنانير','16 دينارًا']),
+ MQ('health','أي عضو في جسم الإنسان يضخ الدم؟','القلب',['الرئتان','المعدة','الدماغ']),
+ MQ('organisms','ماذا تحتاج النباتات لتصنع غذاءها؟','ضوء الشمس',['الظلام','الملح','الرمل']),
+ MQ('organisms','أي حيوان من الثدييات؟','الحوت',['سمك القرش','الصقر','الضفدع']),
+ MQ('matter','ماذا يحدث للماء عند تسخينه إلى 100 درجة سيليزية؟','يغلي',['يتجمد','يصبح صلبًا','لا يتغير']),
+ MQ('energy','أي مادة توصل الكهرباء؟','النحاس',['الخشب','البلاستيك','المطاط']),
+ MQ('forces','أي شيء يجذبه المغناطيس؟','مسمار حديد',['ورقة','ملعقة خشب','كوب زجاج']),
+ MQ('space','ما النجم الأقرب إلى الأرض؟','الشمس',['القمر','المريخ','المشتري']),
+ MQ('space','ما سبب تعاقب الليل والنهار؟','دوران الأرض حول نفسها',['دوران القمر حول الأرض','حركة السحب','اختفاء الشمس']),
+ MQ('matter','أي حالة للمادة ليس لها شكل ثابت ولا حجم ثابت؟','الغاز',['الصلب','السائل','الجليد']),
+ MQ('lifecycle','في دورة حياة الفراشة، ماذا يأتي بعد اليرقة؟','العذراء',['البيضة','الفراشة البالغة','الشرغوف']),
+ MQ('organisms','أي جزء من النبات يمتص الماء من التربة؟','الجذر',['الزهرة','الورقة','الثمرة']),
+ MQ('ecosystem','أي حيوان آكل للأعشاب؟','الجمل',['الأسد','الصقر','الذئب']),
+ MQ('energy','متى يتكوّن الظل؟','عندما يحجب جسم معتم الضوء',['عندما يمر الضوء عبر الزجاج','في الظلام التام','عندما يسخن الجسم']),
+ MQ('ecosystem','أكمل السلسلة الغذائية: عشب ← جرادة ← ...','طائر',['شمس','صخرة','عشب']),
+ MQ('earthsurface','أي مصدر من مصادر الطاقة متجدد؟','الشمس',['النفط','الفحم','الغاز الطبيعي']),
+ MQ('matter','أي مادة تذوب في الماء؟','السكر',['الرمل','الحصى','الزيت']),
+ MQ('energy','كيف ينتقل الصوت؟','بالاهتزازات',['بالضوء','بالمغناطيس','بالظل']),
+ MQ('space','حول أي جرم يدور القمر؟','الأرض',['المريخ','النجوم','المشتري']),
+ MQ('organisms','ما الغاز الذي تطلقه النباتات في الهواء؟','الأكسجين',['ثاني أكسيد الكربون','النيتروجين','الدخان']),
+ MQ('health','ما أفضل طريقة لمنع انتقال الجراثيم؟','غسل اليدين بالصابون',['النوم مبكرًا','شرب العصير','لبس النظارة']),
+ MQ('earthsurface','ماذا نسمي تفتّت الصخور بفعل الماء والرياح؟','التجوية',['التبخر','التكاثف','الانصهار']),
+ MQ('organisms','كم رِجلًا للحشرة؟','6',['8','4','10']),
+ MQ('matter','أي أداة نستخدمها لقياس درجة الحرارة؟','ميزان الحرارة',['المسطرة','الميزان ذو الكفتين','الساعة']),
+ MQ('matter','ماذا يحدث للجليد عندما يسخن؟','ينصهر ويصبح ماءً',['يتجمد أكثر','يبقى كما هو','يصبح حجرًا']),
+ MQ('organisms','بماذا تتنفس الأسماك؟','الخياشيم',['الرئتين','الزعانف','الذيل']),
+ MQ('lifecycle','ما المرحلة التي تأتي بعد البيضة في دورة حياة الضفدع؟','الشرغوف',['الضفدع البالغ','اليرقة','العذراء']),
+ MQ('health','أي من هذه العادات صحية؟','تنظيف الأسنان مرتين يوميًا',['السهر كل ليلة','أكل الحلوى بكثرة','الجلوس طويلًا أمام الشاشة']),
+ MQ('earthsurface','من أين نحصل على الماء العذب في الطبيعة؟','الأنهار والمياه الجوفية',['مياه البحر المالحة','الصخور','الرمال']),
+ MQ('forces','ماذا يحدث للكرة عندما نرميها إلى الأعلى؟','تعود إلى الأسفل بسبب الجاذبية',['تبقى في الهواء','تطير إلى الفضاء','تختفي']),
+];
+
+const TF=[
+ ['whole','9 × 6 = 54',1],['shapes','للمثلث 4 أضلاع',0],['fraction','0.5 يساوي نصفًا',1],['place','العدد 1000 أصغر من 999',0],
+ ['shapes','للمربع 4 أضلاع متساوية',1],['fraction','3/4 أكبر من 1/2',1],['measure','المتر الواحد يساوي 10 سنتيمترات',0],['whole','أي عدد × 0 = 0',1],
+ ['whole','العدد 15 عدد زوجي',0],['fraction','نصف العدد 50 هو 20',0],['measure','في الساعة الواحدة 60 دقيقة',1],['whole','7 + 8 = 16',0],
+ ['shapes','الدائرة ليس لها أضلاع مستقيمة',1],['place','العدد 4052 أكبر من 4205',0],['fraction','ربع العدد 12 يساوي 3',1],['shapes','للمكعب 8 رؤوس',1],
+ ['pattern','النمط 2، 4، 6، 8 يزيد بمقدار 2 كل مرة',1],['data','في جدول «قطط 5، كلاب 3» عدد القطط أقل من عدد الكلاب',0],
+ ['organisms','الحوت سمكة',0],['organisms','تحتاج النباتات إلى الضوء لتنمو',1],['space','القمر يضيء بنفسه',0],['matter','يتجمد الماء عند 0 درجة سيليزية',1],
+ ['energy','الخشب موصل جيد للكهرباء',0],['organisms','للحشرة 6 أرجل',1],['organisms','العنكبوت حشرة',0],['space','تدور الأرض حول الشمس',1],
+ ['matter','للغاز شكل ثابت',0],['health','تساعدنا الرئتان على التنفس',1],['forces','يجذب المغناطيس قطعة الألومنيوم',0],['space','الشمس نجم',1],
+ ['lifecycle','تضع الطيور البيض',1],['organisms','الضفدع من الثدييات',0],['matter','يذوب الملح في الماء',1],['organisms','الجذر يمتص الماء للنبات',1],
+ ['ecosystem','الأسد من آكلات الأعشاب',0],['earthsurface','النفط مورد طبيعي لا يتجدد بسرعة',1],
+].map(([k,t,v])=>({k,s:['life','physical','earth'].includes(SK[k])?'s':'m',t,v}));
+
+const SORTS=[
+ {s:'s',k:'organisms',title:'حي أم غير حي؟',bins:['حي','غير حي'],items:[['قطة',0],['شجرة',0],['فطر',0],['سمكة',0],['نملة',0],['صخرة',1],['كرسي',1],['ماء',1],['قلم',1],['سحابة',1]]},
+ {s:'s',k:'matter',title:'حالات المادة',bins:['صلب','سائل','غاز'],items:[['حجر',0],['مكعب ثلج',0],['كتاب',0],['حليب',1],['عصير',1],['زيت',1],['بخار الماء',2],['الهواء',2],['الأكسجين',2]]},
+ {s:'s',k:'energy',title:'موصل أم عازل للكهرباء؟',bins:['موصل','عازل'],items:[['نحاس',0],['حديد',0],['ألومنيوم',0],['مفتاح معدني',0],['خشب',1],['بلاستيك',1],['مطاط',1],['زجاج',1],['ورق',1]]},
+ {s:'s',k:'organisms',title:'مجموعات الحيوانات',bins:['ثدييات','طيور','أسماك'],items:[['جمل',0],['قطة',0],['حوت',0],['حصان',0],['صقر',1],['حمامة',1],['بطريق',1],['نعامة',1],['هامور',2],['قرش',2],['سلمون',2]]},
+ {s:'s',k:'forces',title:'هل يجذبه المغناطيس؟',bins:['نعم','لا'],items:[['مسمار حديد',0],['مشبك ورق معدني',0],['إبرة',0],['علبة حديد',0],['ملعقة خشب',1],['ممحاة',1],['ورقة',1],['كوب زجاج',1],['قطعة ألومنيوم',1]]},
+ {s:'s',k:'ecosystem',title:'ماذا يأكل الحيوان؟',bins:['أعشاب','لحوم'],items:[['جمل',0],['غزال',0],['أرنب',0],['بقرة',0],['حصان',0],['أسد',1],['نمر',1],['صقر',1],['ذئب',1],['قرش',1]]},
+ {s:'m',k:'shapes',title:'ثنائي الأبعاد أم ثلاثي الأبعاد؟',bins:['ثنائي الأبعاد','ثلاثي الأبعاد'],items:[['مربع',0],['مثلث',0],['دائرة',0],['مستطيل',0],['مكعب',1],['كرة',1],['أسطوانة',1],['مخروط',1],['هرم',1]]},
+ {s:'m',k:'measure',title:'ماذا تقيس هذه الوحدة؟',bins:['الطول','الكتلة','الزمن'],items:[['متر',0],['سنتيمتر',0],['كيلومتر',0],['غرام',1],['كيلوغرام',1],['دقيقة',2],['ساعة',2],['ثانية',2],['يوم',2]]},
+ {s:'m',k:'fraction',title:'أكبر من النصف أم أصغر؟',bins:['أكبر من 1/2','أصغر من 1/2'],items:[['3/4',0],['2/3',0],['5/6',0],['7/8',0],['1/4',1],['1/3',1],['1/8',1],['2/10',1]]},
+ {s:'m',k:'whole',gen:()=>{const items=[];for(let i=0;i<12;i++){const n=rnd(11,999);items.push([String(n),n%2]);}return{title:'زوجي أم فردي؟',bins:['زوجي','فردي'],items};}},
+ {s:'m',k:'place',gen:()=>{const items=[];while(items.length<12){const n=rnd(100,999);if(n!==500)items.push([String(n),n>500?0:1]);}return{title:'مقارنة بالعدد 500',bins:['أكبر من 500','أصغر من 500'],items};}},
+];
+const BALLOONS=[
+ {s:'s',k:'organisms',rule:'الحشرات',good:['نملة','نحلة','فراشة','جرادة','ذبابة'],bad:['عنكبوت','قطة','سمكة','حمامة','ضفدع']},
+ {s:'s',k:'energy',rule:'مصادر الضوء',good:['الشمس','مصباح','شمعة مشتعلة','نار','برق'],bad:['القمر','مرآة','كتاب','كرسي','حجر']},
+ {s:'s',k:'ecosystem',rule:'آكلات اللحوم',good:['أسد','نمر','صقر','ذئب','قرش'],bad:['جمل','بقرة','أرنب','غزال','حصان']},
+ {s:'s',k:'organisms',rule:'أجزاء النبات',good:['جذر','ساق','ورقة','زهرة','بذرة'],bad:['ريش','زعانف','منقار','خياشيم','مخلب']},
+ {s:'s',k:'matter',rule:'السوائل',good:['ماء','حليب','عصير','زيت','عسل'],bad:['حجر','ثلج','بخار','خشب','رمل']},
+ {s:'m',k:'shapes',rule:'أشكال لها 4 أضلاع',good:['مربع','مستطيل','معيّن','متوازي أضلاع'],bad:['مثلث','دائرة','خماسي','سداسي']},
+ {s:'m',k:'whole',rule:'ناتجها يساوي 12',good:['3 × 4','6 + 6','20 − 8','24 ÷ 2','2 × 6','15 − 3','9 + 3','36 ÷ 3'],bad:['3 + 4','5 × 3','20 − 6','24 ÷ 3','2 × 7','10 + 1','18 − 4','4 × 4']},
+ {s:'m',k:'whole',gen:()=>numRule('الأعداد الزوجية',n=>n%2===0,10,99)},
+ {s:'m',k:'pattern',gen:()=>numRule('مضاعفات العدد 3',n=>n%3===0,6,60)},
+ {s:'m',k:'pattern',gen:()=>numRule('مضاعفات العدد 5',n=>n%5===0,5,100)},
+];
+function numRule(rule,pred,min,max){const good=[],bad=[];let g=0;
+  while((good.length<10||bad.length<10)&&g++<2000){const n=rnd(min,max);const arr=pred(n)?good:bad;if(arr.length<10&&!arr.includes(String(n)))arr.push(String(n));}
+  return{rule,good,bad};}
+const MEMS=[
+ {s:'s',k:'health',title:'العضو ووظيفته',pairs:[['القلب','ضخ الدم'],['الرئتان','التنفس'],['المعدة','هضم الطعام'],['العين','الرؤية'],['الأذن','السمع'],['الدماغ','التفكير']]},
+ {s:'s',k:'matter',title:'أداة القياس وما تقيسه',pairs:[['المسطرة','الطول'],['الميزان','الكتلة'],['ميزان الحرارة','درجة الحرارة'],['الساعة','الزمن'],['المخبار المدرج','الحجم'],['البوصلة','الاتجاه']]},
+ {s:'s',k:'ecosystem',title:'الحيوان وبيئته',pairs:[['الجمل','الصحراء'],['الدب القطبي','القطب المتجمد'],['القرد','الغابة'],['الحوت','البحر'],['الضفدع','البركة'],['النسر','الجبال']]},
+ {s:'m',k:'fraction',title:'الكسور المتكافئة',pairs:[['1/2','2/4'],['1/3','2/6'],['1/4','2/8'],['3/4','6/8'],['2/3','4/6'],['1/5','2/10']]},
+ {s:'m',k:'shapes',title:'الشكل وعدد أضلاعه',pairs:[['مثلث','3 أضلاع'],['مربع','4 أضلاع'],['خماسي','5 أضلاع'],['سداسي','6 أضلاع'],['سباعي','7 أضلاع'],['ثماني','8 أضلاع']]},
+ {s:'m',k:'whole',gen:()=>{const pairs=[],prods=new Set();while(pairs.length<6){const x=rnd(2,9),y=rnd(2,9);if(prods.has(x*y))continue;prods.add(x*y);pairs.push([`${x} × ${y}`,String(x*y)]);}return{title:'حقائق الضرب',pairs};}},
+];
+const FACTS=['للأخطبوط ثلاثة قلوب','الضوء أسرع من الصوت','الحوت الأزرق أكبر حيوان على الأرض','يصنع النحل العسل من رحيق الأزهار','للعنكبوت ثماني أرجل','يغطي الماء معظم سطح الأرض','الخفاش من الثدييات وليس من الطيور','الدقيقة الواحدة فيها 60 ثانية'];
+
+</script>
+<script>
+/* ================= النواة المشتركة (الخادم + وضع التجربة) ================= */
+var TABLES = {
+  users: ['id','role','username','name','class','classes','salt','hash','key','active','created','lastLogin'],
+  answers: ['time','userId','mode','qid','subject','domain','skill','correct','ms'],
+  characters: ['id','name','img'],
+  settings: ['key','value']
+};
+function sha256raw(ascii) {
+  function rr(v, a) { return (v >>> a) | (v << (32 - a)); }
+  var maxWord = Math.pow(2, 32), i, j, result = '', words = [], bitLen = ascii.length * 8;
+  var hash = [], k = [], pc = 0, isComp = {};
+  for (var cand = 2; pc < 64; cand++) {
+    if (!isComp[cand]) {
+      for (i = 0; i < 313; i += cand) isComp[i] = cand;
+      hash[pc] = (Math.pow(cand, .5) * maxWord) | 0;
+      k[pc++] = (Math.pow(cand, 1 / 3) * maxWord) | 0;
+    }
+  }
+  hash = hash.slice(0, 8);
+  ascii += '\x80';
+  while (ascii.length % 64 - 56) ascii += '\x00';
+  for (i = 0; i < ascii.length; i++) { j = ascii.charCodeAt(i); words[i >> 2] |= j << ((3 - i) % 4) * 8; }
+  words[words.length] = ((bitLen / maxWord) | 0);
+  words[words.length] = bitLen;
+  for (j = 0; j < words.length;) {
+    var w = words.slice(j, j += 16), old = hash;
+    hash = hash.slice(0, 8);
+    for (i = 0; i < 64; i++) {
+      var w15 = w[i - 15], w2 = w[i - 2], a = hash[0], e = hash[4];
+      var t1 = hash[7] + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + ((e & hash[5]) ^ ((~e) & hash[6])) + k[i] +
+        (w[i] = (i < 16) ? w[i] : (w[i - 16] + (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) | 0);
+      var t2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+      hash = [(t1 + t2) | 0].concat(hash);
+      hash[4] = (hash[4] + t1) | 0;
+    }
+    for (i = 0; i < 8; i++) hash[i] = (hash[i] + old[i]) | 0;
+  }
+  for (i = 0; i < 8; i++) for (j = 3; j + 1; j--) { var b = (hash[i] >> (j * 8)) & 255; result += ((b < 16) ? 0 : '') + b.toString(16); }
+  return result;
+}
+function sha256u(s) { return sha256raw(unescape(encodeURIComponent(String(s)))); }
+
+function aggregate(rows) {
+  var A = {};
+  rows.forEach(function (r) {
+    var id = String(r.studentId);
+    var a = A[id] || (A[id] = { pre: { d: {}, k: {} }, post: { d: {}, k: {} }, game: { d: {}, k: {} }, days: {}, last: 0 });
+    var m = a[r.mode]; if (!m) return;
+    var c = Number(r.correct) ? 1 : 0;
+    var d = m.d[r.domain] || (m.d[r.domain] = [0, 0]); d[0] += c; d[1]++;
+    var k = m.k[r.skill] || (m.k[r.skill] = [0, 0]); k[0] += c; k[1]++;
+    if (r.mode === 'game') { var t = new Date(r.time).getTime(); if (t > a.last) a.last = t; a.days[new Date(t).toISOString().slice(0, 10)] = 1; }
+  });
+  Object.keys(A).forEach(function (id) { A[id].days = Object.keys(A[id].days).length; });
+  return A;
+}
+function statusOf(rows) {
+  var didPre = rows.some(function (r) { return r.mode === 'pre'; }), didPost = rows.some(function (r) { return r.mode === 'post'; });
+  var k = {};
+  rows.forEach(function (r) { if (r.mode === 'post' || !r.skill) return; var x = k[r.skill] || (k[r.skill] = [0, 0]); x[0] += Number(r.correct) ? 1 : 0; x[1]++; });
+  var weak = Object.keys(k).filter(function (s) { return k[s][1] >= 2 && k[s][0] / k[s][1] < .7; })
+    .sort(function (a, b) { return k[a][0] / k[a][1] - k[b][0] / k[b][1]; }).slice(0, 3);
+  return { didPre: didPre, didPost: didPost, weak: weak };
+}
+
+function makeAPI(DB) {
+  var norm = function (s) { return String(s == null ? '' : s).trim().toLowerCase(); };
+  var iso = function (v) { if (!v) return ''; var d = new Date(v); return isNaN(d.getTime()) ? '' : d.toISOString(); };
+  var rid = function (n) { return DB.uuid().replace(/-/g, '').slice(0, n || 12); };
+  var hashPw = function (pw, salt) { return sha256u(String(salt) + '|' + String(pw)); };
+  var genPw = function () { return String(1000 + Math.floor(Math.random() * 9000)); };
+  var cleanUser = function (u) { return norm(u).replace(/\s+/g, ''); };
+  var cleanClasses = function (c) { return String(c || '').split(/[,،]/).map(function (x) { return x.trim(); }).filter(Boolean).join(','); };
+  function err(code) { return new Error(code); }
+  function setting(k) { var r = DB.rows('settings').find(function (x) { return x.key === k; }); return r ? String(r.value) : ''; }
+  function setSetting(k, v) { if (!DB.update('settings', 'key', k, { value: v })) DB.insert('settings', { key: k, value: v }); }
+  function guard(k) {
+    var n = Number(DB.cacheGet('f_' + k) || 0);
+    if (n >= 5) throw err('LOCK');
+    return { fail: function () { DB.cachePut('f_' + k, String(n + 1), 600); } };
+  }
+  function users() { return DB.rows('users'); }
+  function byId(id) { return users().find(function (u) { return String(u.id) === String(id); }); }
+  function isActive(u) { return String(u.active) !== 'no'; }
+  function sess(token, roles) {
+    var v = DB.cacheGet('t_' + token); if (!v) throw err('SESSION');
+    var s = JSON.parse(v); if (roles && roles.indexOf(s.role) < 0) throw err('FORBIDDEN');
+    return s;
+  }
+  function myClasses(u) { return u.role === 'admin' ? null : String(u.classes || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); }
+  function canClass(s, cls) { if (s.role === 'admin') return true; var u = byId(s.id); return (myClasses(u) || []).map(norm).indexOf(norm(cls)) >= 0; }
+  function usernameFree(un, exceptId) { return !users().some(function (u) { return norm(u.username) === un && String(u.id) !== String(exceptId || ''); }); }
+  function startSession(u) {
+    var t = DB.uuid();
+    DB.cachePut('t_' + t, JSON.stringify({ id: String(u.id), role: String(u.role) }), 21600);
+    DB.update('users', 'id', u.id, { lastLogin: DB.now() });
+    return t;
+  }
+  function studentInfo(u) {
+    var st = statusOf(DB.rows('answers').filter(function (r) { return String(r.userId) === String(u.id); }));
+    return { id: String(u.id), name: String(u.name), class: String(u.class), username: String(u.username),
+      didPre: st.didPre, didPost: st.didPost, weak: st.weak, postOpen: setting('post:' + norm(u.class)) === 'yes' };
+  }
+  function pubStudent(u) { return { id: String(u.id), name: String(u.name), class: String(u.class), username: String(u.username), key: String(u.key || ''), active: isActive(u), lastLogin: iso(u.lastLogin) }; }
+  function pubStaff(u) { return { id: String(u.id), name: String(u.name), role: String(u.role), username: String(u.username), classes: String(u.classes || ''), active: isActive(u), lastLogin: iso(u.lastLogin) }; }
+  function newUser(role, o) {
+    var salt = rid(16), pw = String(o.password || '') || genPw();
+    return { password: pw, rec: { id: (role === 'student' ? 'S' : role === 'teacher' ? 'T' : 'A') + rid(10), role: role, username: o.username,
+      name: o.name || '', class: o.class || '', classes: o.classes || '', salt: salt, hash: hashPw(pw, salt),
+      key: role === 'student' ? rid(12) : '', active: 'yes', created: DB.now(), lastLogin: '' } };
+  }
+  function scopedStudents(s) {
+    var me = byId(s.id), mine = myClasses(me), mineN = mine ? mine.map(norm) : null;
+    return users().filter(function (u) { return u.role === 'student' && (!mineN || mineN.indexOf(norm(u.class)) >= 0); });
+  }
+
+  var A = {};
+  A._setup = function () {
+    if (!users().some(function (u) { return u.role === 'admin'; }))
+      DB.insert('users', newUser('admin', { username: 'admin', name: 'مدير النظام', password: 'admin1234' }).rec);
+  };
+  A.login = function (username, password) {
+    var un = cleanUser(username), g = guard('u_' + un);
+    var u = users().find(function (x) { return norm(x.username) === un; });
+    if (!u || !isActive(u) || hashPw(password, u.salt) !== String(u.hash)) { g.fail(); throw err('BAD_LOGIN'); }
+    return { token: startSession(u), role: String(u.role), user: u.role === 'student' ? studentInfo(u) : pubStaff(u) };
+  };
+  A.loginKey = function (key) {
+    key = String(key || ''); if (key.length < 8) throw err('BAD_KEY');
+    var u = users().find(function (x) { return x.role === 'student' && String(x.key) === key; });
+    if (!u || !isActive(u)) throw err('BAD_KEY');
+    return { token: startSession(u), role: 'student', user: studentInfo(u) };
+  };
+  A.characters = function (token) {
+    sess(token);
+    return DB.rows('characters').map(function (c) { return { id: String(c.id), name: String(c.name), img: String(c.img) }; });
+  };
+  A.logAnswers = function (token, list) {
+    var s = sess(token, ['student']);
+    if (!Array.isArray(list) || !list.length) return true;
+    var now = DB.now();
+    var rows = list.slice(0, 500).map(function (x) { return { time: now, userId: s.id, mode: String(x.mode), qid: String(x.qid || '').slice(0, 90),
+      subject: String(x.s || ''), domain: String(x.d || ''), skill: String(x.k || ''), correct: x.ok ? 1 : 0, ms: Number(x.ms) || 0 }; });
+    DB.lock(function () { DB.insertMany('answers', rows); });
+    return true;
+  };
+  A.changePassword = function (token, oldPw, newPw) {
+    var s = sess(token), u = byId(s.id);
+    if (hashPw(oldPw, u.salt) !== String(u.hash)) throw err('BAD_LOGIN');
+    if (String(newPw).length < 4) throw err('SHORT');
+    var salt = rid(16); DB.update('users', 'id', u.id, { salt: salt, hash: hashPw(newPw, salt) });
+    return true;
+  };
+  A.dashboard = function (token) {
+    var s = sess(token, ['admin', 'teacher']), me = byId(s.id), all = users(), mine = myClasses(me);
+    var studs = scopedStudents(s), ids = {};
+    studs.forEach(function (u) { ids[String(u.id)] = 1; });
+    var ans = DB.rows('answers').filter(function (a) { return ids[String(a.userId)]; })
+      .map(function (a) { return { studentId: a.userId, mode: a.mode, domain: a.domain, skill: a.skill, correct: a.correct, time: a.time }; });
+    var cl = mine ? mine.slice() : studs.map(function (u) { return String(u.class).trim(); })
+      .concat(all.filter(function (u) { return u.role === 'teacher'; }).reduce(function (a, t) { return a.concat(String(t.classes || '').split(',')); }, []));
+    var seen = {}, classes = [];
+    cl.map(function (x) { return String(x).trim(); }).filter(Boolean).forEach(function (c) { if (!seen[norm(c)]) { seen[norm(c)] = 1; classes.push(c); } });
+    var post = {}; classes.forEach(function (c) { post[c] = setting('post:' + norm(c)) === 'yes'; });
+    return { appUrl: DB.appUrl ? DB.appUrl() : '', me: pubStaff(me), classes: classes.sort(), students: studs.map(pubStudent), agg: aggregate(ans), post: post,
+      characters: DB.rows('characters').map(function (c) { return { id: String(c.id), name: String(c.name), img: String(c.img) }; }),
+      teachers: s.role === 'admin' ? all.filter(function (u) { return u.role !== 'student'; }).map(pubStaff) : [] };
+  };
+  A.addStudents = function (token, cls, list) {
+    var s = sess(token, ['admin', 'teacher']); cls = String(cls || '').trim();
+    if (!cls) throw err('NO_CLASS'); if (!canClass(s, cls)) throw err('FORBIDDEN');
+    return DB.lock(function () {
+      var all = users(), taken = {}, out = [], recs = [];
+      all.forEach(function (u) { taken[norm(u.username)] = 1; });
+      var base = norm(cls).replace(/[^a-z0-9]/g, '') || 'st';
+      var n = all.filter(function (u) { return u.role === 'student' && norm(u.class) === norm(cls); }).length;
+      (list || []).forEach(function (it) {
+        var name = String(it.name || '').trim().slice(0, 40); if (!name) return;
+        var un = cleanUser(it.username || '');
+        if (!un || un.length < 3 || taken[un]) { do { n++; un = base + '-' + (n < 10 ? '0' : '') + n; } while (taken[un]); }
+        taken[un] = 1;
+        var r = newUser('student', { username: un, name: name, class: cls, password: String(it.password || '').trim() });
+        recs.push(r.rec); out.push({ id: r.rec.id, name: name, class: cls, username: un, password: r.password, key: r.rec.key });
+      });
+      DB.insertMany('users', recs);
+      return out;
+    });
+  };
+  A.updateStudent = function (token, id, p) {
+    var s = sess(token, ['admin', 'teacher']), u = byId(id);
+    if (!u || u.role !== 'student') throw err('NOT_FOUND'); if (!canClass(s, u.class)) throw err('FORBIDDEN');
+    var patch = {};
+    if (p.name != null) patch.name = String(p.name).trim().slice(0, 40);
+    if (p.username != null) { var un = cleanUser(p.username); if (un.length < 3) throw err('SHORT'); if (!usernameFree(un, id)) throw err('EXISTS'); patch.username = un; }
+    if (p.class != null && norm(p.class) !== norm(u.class)) { if (!canClass(s, p.class)) throw err('FORBIDDEN'); patch.class = String(p.class).trim(); }
+    if (p.active != null) patch.active = p.active ? 'yes' : 'no';
+    DB.update('users', 'id', id, patch);
+    return pubStudent(Object.assign({}, u, patch));
+  };
+  A.resetPassword = function (token, id) {
+    var s = sess(token, ['admin', 'teacher']), u = byId(id);
+    if (!u) throw err('NOT_FOUND');
+    if (u.role === 'student') { if (!canClass(s, u.class)) throw err('FORBIDDEN'); }
+    else if (!(s.role === 'admin' && u.role === 'teacher')) throw err('FORBIDDEN');
+    var pw = u.role === 'student' ? genPw() : rid(6), salt = rid(16), patch = { salt: salt, hash: hashPw(pw, salt) };
+    if (u.role === 'student') patch.key = rid(12);
+    DB.update('users', 'id', id, patch);
+    return { id: String(u.id), password: pw, key: patch.key || '', username: String(u.username), name: String(u.name), class: String(u.class) };
+  };
+  A.addTeacher = function (token, o) {
+    sess(token, ['admin']);
+    var un = cleanUser(o.username); if (un.length < 3) throw err('SHORT'); if (!usernameFree(un)) throw err('EXISTS');
+    var r = newUser('teacher', { username: un, name: String(o.name || '').trim(), classes: cleanClasses(o.classes), password: String(o.password || '').trim() || rid(6) });
+    DB.insert('users', r.rec);
+    var out = pubStaff(r.rec); out.password = r.password; return out;
+  };
+  A.updateTeacher = function (token, id, p) {
+    sess(token, ['admin']); var u = byId(id);
+    if (!u || u.role !== 'teacher') throw err('NOT_FOUND');
+    var patch = {};
+    if (p.name != null) patch.name = String(p.name).trim();
+    if (p.classes != null) patch.classes = cleanClasses(p.classes);
+    if (p.username != null) { var un = cleanUser(p.username); if (un.length < 3) throw err('SHORT'); if (!usernameFree(un, id)) throw err('EXISTS'); patch.username = un; }
+    if (p.active != null) patch.active = p.active ? 'yes' : 'no';
+    DB.update('users', 'id', id, patch);
+    return pubStaff(Object.assign({}, u, patch));
+  };
+  A.setPostOpen = function (token, cls, open) {
+    var s = sess(token, ['admin', 'teacher']); if (!canClass(s, cls)) throw err('FORBIDDEN');
+    setSetting('post:' + norm(cls), open ? 'yes' : 'no'); return true;
+  };
+  A.saveCharacter = function (token, name, img) {
+    sess(token, ['admin']); if (String(img).length > 49000) throw err('TOO_BIG');
+    var c = { id: 'C' + rid(8), name: String(name).slice(0, 30), img: String(img) };
+    DB.insert('characters', c); return c;
+  };
+  A.deleteCharacter = function (token, id) { sess(token, ['admin']); DB.remove('characters', 'id', id); return true; };
+  A.exportAnswers = function (token) {
+    var s = sess(token, ['admin', 'teacher']), studs = scopedStudents(s), map = {};
+    studs.forEach(function (u) { map[String(u.id)] = u; });
+    return DB.rows('answers').filter(function (a) { return map[String(a.userId)]; }).map(function (a) {
+      var u = map[String(a.userId)];
+      return { time: iso(a.time), name: String(u.name), username: String(u.username), class: String(u.class), mode: a.mode, qid: a.qid,
+        subject: a.subject, domain: a.domain, skill: a.skill, correct: Number(a.correct), ms: Number(a.ms) };
+    });
+  };
+  return A;
+}
+
+</script>
+<script>
+/* ================= أدوات ================= */
+const $=s=>document.querySelector(s);
+const LOGO=(document.getElementById('schoolLogo')||{}).src||'';
+document.querySelectorAll('[data-logo]').forEach(i=>i.src=LOGO);
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const S={players:[],round:1,totalRounds:6,subject:'both',arDigits:true,starIndex:-1,sound:true,music:true,cur:null,lastMini:null,
+  cls:'',pub:null,me:null,seats:[],chars:[],logQ:[],tpin:null,td:null,dashCls:null,dashSel:null,postOpen:false};
+function N(x){x=String(x);if(!S.arDigits)return x;return x.replace(/(\d)\.(\d)/g,'$1٫$2').replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);}
+const T=s=>fracHTML(esc(N(s)));
+function fracHTML(h){return h.replace(/([0-9٠-٩]+)\/([0-9٠-٩]+)/g,'<span class="fr" dir="ltr"><span>$1</span><span>$2</span></span>');}
+function optHTML(o){const e=EMO[o];return (e?`<span class="oe" aria-hidden="true">${e}</span>`:'')+`<span>${T(o)}</span>`;}
+function speak(text){try{if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(String(text).replace(/(\d+)\/(\d+)/g,'$1 من $2').replace(/\p{Extended_Pictographic}|\uFE0F|\u200D/gu,'').replace(/☐/g,'الفراغ'));
+  u.lang='ar-SA';u.rate=.88;const v=speechSynthesis.getVoices().find(x=>/^ar/i.test(x.lang));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
+function sayText(q){return q.q+'. '+[q.a,...q.o].join('، ');}
+function clockSVG(h,m,x,label){const cx=x,cy=80,r=58;let t='';for(let i=0;i<12;i++){const a=i/12*2*Math.PI;t+=`<line x1="${cx+Math.sin(a)*r*.82}" y1="${cy-Math.cos(a)*r*.82}" x2="${cx+Math.sin(a)*r*.95}" y2="${cy-Math.cos(a)*r*.95}" stroke="#16324F" stroke-width="${i%3?2:4}"/>`;}
+  [[12,0],[3,1],[6,2],[9,3]].forEach(([n,k])=>{const a=k*Math.PI/2;t+=`<text x="${cx+Math.sin(a)*r*.62}" y="${cy-Math.cos(a)*r*.62+7}" text-anchor="middle" font-size="19" font-weight="800" fill="#16324F">${N(n)}</text>`;});
+  const ha=((h%12)+m/60)/12*2*Math.PI,ma=m/60*2*Math.PI;
+  return `<circle cx="${cx}" cy="${cy}" r="${r+6}" fill="#FF9F1C"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff"/>${t}
+    <line x1="${cx}" y1="${cy}" x2="${cx+Math.sin(ha)*r*.45}" y2="${cy-Math.cos(ha)*r*.45}" stroke="#16324F" stroke-width="7" stroke-linecap="round"/>
+    <line x1="${cx}" y1="${cy}" x2="${cx+Math.sin(ma)*r*.75}" y2="${cy-Math.cos(ma)*r*.75}" stroke="#FF5D73" stroke-width="4" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="5" fill="#16324F"/>
+    <text x="${cx}" y="170" text-anchor="middle" font-size="18" font-weight="800" fill="#16324F">${label}</text>`;}
+function vis(v){
+  if(!v)return'';
+  const W=(inner,vb='0 0 300 180')=>`<div class="vis"><svg viewBox="${vb}" aria-hidden="true" font-family="'Baloo Bhaijaan 2',Tahoma,sans-serif">${inner}</svg></div>`;
+  switch(v.t){
+  case 'emoji':return `<div class="vis-emoji" aria-hidden="true">${v.e}</div>`;
+  case 'pizza':{const n=v.n,r=78,cx=150,cy=90;let p=`<circle cx="${cx}" cy="${cy}" r="${r+9}" fill="#E9B864"/>`;
+    for(let i=0;i<n;i++){const a0=-Math.PI/2+i*2*Math.PI/n,a1=a0+2*Math.PI/n,on=i<v.sh;
+      p+=`<path d="M${cx},${cy} L${cx+r*Math.cos(a0)},${cy+r*Math.sin(a0)} A${r},${r} 0 0,1 ${cx+r*Math.cos(a1)},${cy+r*Math.sin(a1)} Z" fill="${on?'#FF9F1C':'#FFF1CC'}" stroke="#B5651D" stroke-width="3"/>`;
+      if(on){const am=(a0+a1)/2;p+=`<circle cx="${cx+r*.58*Math.cos(am)}" cy="${cy+r*.58*Math.sin(am)}" r="8" fill="#E4572E"/>`;}}
+    return W(p);}
+  case 'choc':{const n=v.n,w=250/n;let p='';for(let i=0;i<n;i++){const x=275-(i+1)*w,on=i<v.sh;
+      p+=`<rect x="${x+3}" y="45" width="${w-6}" height="90" rx="8" fill="${on?'#7B4A2A':'#EADBC8'}" stroke="#4A2C17" stroke-width="3"/><rect x="${x+12}" y="56" width="${w-24}" height="68" rx="5" fill="none" stroke="${on?'#9C6B3F':'#D5C1A8'}" stroke-width="3"/>`;}
+    return W(p);}
+  case 'pattern':{const n=v.seq.length,gap=290/n;let p=`<path d="M0 150 Q150 120 300 150 L300 180 L0 180Z" fill="#1FA2C6" opacity=".35"/>`;
+    v.seq.forEach((x,i)=>{const cx=295-(i+.5)*gap,cy=118;p+=`<ellipse cx="${cx}" cy="${cy}" rx="${gap*.42}" ry="22" fill="${x==null?'#FFC23D':'#9AA9B5'}" stroke="#5F6F7B" stroke-width="3"/>
+      <text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="24" font-weight="800" fill="#16324F">${x==null?'؟':N(x)}</text>`;});
+    p+=`<text x="${295-gap*.5}" y="80" text-anchor="middle" font-size="40">${v.e}</text>`;return W(p);}
+  case 'rect':{const s=Math.min(200/v.w,110/v.h),w=v.w*s,h=v.h*s,x=150-w/2,y=90-h/2;
+    return W(`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${v.e==='🏊'?'#7FD8E8':'#9BE08A'}" stroke="#16324F" stroke-width="4" stroke-dasharray="${v.e==='🏊'?'0':'10 6'}"/>
+      <text x="150" y="${y+h/2+14}" text-anchor="middle" font-size="36">${v.e}</text>
+      <text x="150" y="${y-8}" text-anchor="middle" font-size="18" font-weight="800" fill="#16324F">${N(v.w)} ${v.u}</text>
+      <text x="${x+w+8}" y="${y+h/2+6}" text-anchor="start" font-size="18" font-weight="800" fill="#16324F">${N(v.h)} ${v.u}</text>`,'0 0 300 180');}
+  case 'clocks':return W(clockSVG(v.a[0],v.a[1],220,'البداية')+clockSVG(v.b[0],v.b[1],80,'النهاية'),'0 0 300 180');
+  case 'bars':{const n=v.rows.length,max=Math.max(...v.rows.map(r=>r[2])),gw=260/n;let p=`<line x1="15" y1="140" x2="285" y2="140" stroke="#16324F" stroke-width="3"/>`;
+    v.rows.forEach(([l,e,val],i)=>{const x=280-(i+1)*gw+gw*.2,bw=gw*.6,h=val/max*100;
+      p+=`<rect x="${x}" y="${140-h}" width="${bw}" height="${h}" rx="6" fill="${['#FF5D73','#FFC23D','#22B573','#7B5CFF'][i%4]}"/>
+      <text x="${x+bw/2}" y="${132-h}" text-anchor="middle" font-size="18" font-weight="800" fill="#16324F">${N(val)}</text>
+      <text x="${x+bw/2}" y="162" text-anchor="middle" font-size="18">${e}</text><text x="${x+bw/2}" y="178" text-anchor="middle" font-size="13" font-weight="700" fill="#16324F">${l}</text>`;});
+    return W(p,'0 0 300 182');}
+  case 'picto':return `<div class="picto">${v.rows.map(([l,c])=>`<div class="prow"><b>${esc(l)}</b><span>${v.e.repeat(c)}</span></div>`).join('')}<div class="pkey">المفتاح: ${v.e} = ${N(v.per)}</div></div>`;
+  case 'chain':return `<div class="chain">${v.items.map(([e,l])=>`<div><span>${e}</span><b>${esc(l)}</b></div>`).join('<i>⬅</i>')}</div>`;
+  case 'magnets':return W(`<g><rect x="20" y="60" width="55" height="50" fill="#1FA2C6"/><rect x="75" y="60" width="55" height="50" fill="#FF5D73"/>
+      <text x="47" y="93" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">ج</text><text x="102" y="93" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">ش</text></g>
+      <g><rect x="170" y="60" width="55" height="50" fill="#FF5D73"/><rect x="225" y="60" width="55" height="50" fill="#1FA2C6"/>
+      <text x="197" y="93" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">ش</text><text x="252" y="93" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">ج</text></g>
+      <text x="150" y="96" text-anchor="middle" font-size="30" font-weight="800" fill="#16324F">؟</text>
+      <text x="150" y="150" text-anchor="middle" font-size="15" font-weight="700" fill="#16324F">ش = شمال   ج = جنوب</text>`);
+  case 'orbit':return W(`<ellipse cx="150" cy="90" rx="125" ry="62" fill="none" stroke="#16324F" stroke-width="2.5" stroke-dasharray="8 6"/>
+      <circle cx="150" cy="90" r="30" fill="#FFC23D"/><circle cx="150" cy="90" r="38" fill="#FFC23D" opacity=".3"/><text x="150" y="98" text-anchor="middle" font-size="22">☀️</text>
+      <text x="262" y="112" text-anchor="middle" font-size="34">🌍</text><path d="M60 40 q-20 12 -30 32" fill="none" stroke="#FF5D73" stroke-width="4" marker-end="url(#ah)"/>
+      <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8Z" fill="#FF5D73"/></marker></defs>`);
+  case 'moon':return `<div class="vis-emoji moonrow" aria-hidden="true">🌑🌒🌓🌔🌕🌖🌗🌘</div>`;
+  case 'place':return `<div class="vis-emoji" aria-hidden="true" style="font-size:3rem">${v.e}</div><div class="pv" dir="ltr">${[...v.n].map((d,i)=>`<span class="${i===v.i?'on':''}">${N(d)}</span>`).join('')}</div>`;
+  }return'';}
+
+const subjOK=s=>S.subject==='both'||S.subject===s;
+function drawer(arr){const used=new Set();return()=>{let p=arr.filter(x=>subjOK(x.s)&&!used.has(x));if(!p.length){used.clear();p=arr.filter(x=>subjOK(x.s));}const x=pick(p);used.add(x);
+  if(x.gen){const r=x.gen();r.s=x.s;r.k=x.k;return r;}return x;};}
+const drawMCQ=drawer(MCQ),drawTF=drawer(TF),drawSort=drawer(SORTS),drawBalloon=drawer(BALLOONS),drawMem=drawer(MEMS);
+function genMathMCQ(){
+  const t=rnd(0,3);let q,a;
+  if(t===0){const x=rnd(3,9),y=rnd(3,9);q=`ما ناتج ${x} × ${y}؟`;a=x*y;}
+  else if(t===1){const x=rnd(120,499),y=rnd(110,480);q=`ما ناتج ${x} + ${y}؟`;a=x+y;}
+  else if(t===2){const x=rnd(400,900),y=rnd(100,390);q=`ما ناتج ${x} − ${y}؟`;a=x-y;}
+  else{const y=rnd(2,9),z=rnd(3,9);q=`ما ناتج ${y*z} ÷ ${y}؟`;a=z;}
+  const o=[];for(const d of shuffle([1,-1,2,-2,10,-10,3])){if(a+d>0&&o.length<3)o.push(String(a+d));}
+  return{s:'m',k:'whole',q,a:String(a),o};
+}
+function getMCQ(p){
+  const weak=(p&&p.student&&p.student.weak)||[];
+  if(weak.length&&Math.random()<.5){const pool=MCQ.filter(q=>subjOK(q.s)&&weak.includes(q.k));if(pool.length)return pick(pool);}
+  if(subjOK('m')&&Math.random()<(subjOK('s')?.15:.3))return genMathMCQ();
+  return drawMCQ();
+}
+
+/* ================= الاتصال بالخادم ================= */
+/* عند الرفع على GitHub Pages: ضع هنا رابط تطبيق Apps Script (Web app URL) */
+const API_URL='';
+const LIVE=!!(window.google&&google.script&&google.script.run);
+const REMOTE=!LIVE&&!!API_URL;
+const MemDB=(()=>{const T={users:[],answers:[],characters:[],settings:[]},C={};return{
+  rows:t=>T[t].map(o=>({...o})),insertMany:(t,a)=>a.forEach(o=>T[t].push({...o})),insert:(t,o)=>{T[t].push({...o});},
+  update:(t,kf,kv,p)=>{const r=T[t].find(o=>String(o[kf])===String(kv));if(r){Object.assign(r,p);return true;}return false;},
+  remove:(t,kf,kv)=>{T[t]=T[t].filter(o=>String(o[kf])!==String(kv));},
+  uuid:()=>'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);}),
+  cacheGet:k=>{const e=C[k];return e&&e.exp>Date.now()?e.v:null;},cachePut:(k,v,s)=>{C[k]={v,exp:Date.now()+s*1000};},
+  lock:fn=>fn(),now:()=>new Date(),appUrl:()=>''};})();
+const DemoAPI=makeAPI(MemDB);
+function api(fn,...args){
+  if(LIVE)return new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(e=>rej(new Error((e&&e.message)||String(e)))).run(fn,args));
+  if(REMOTE)return fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn,args})})
+    .then(r=>r.json()).then(j=>{if(j.error)throw new Error(j.error);return j.result;});
+  return new Promise((res,rej)=>setTimeout(()=>{try{if(fn.charAt(0)==='_')throw new Error('UNKNOWN');res(JSON.parse(JSON.stringify(DemoAPI[fn](...args))));}catch(e){rej(e);}},120));
+}
+const ERR={BAD_LOGIN:'اسم المستخدم أو كلمة المرور غير صحيحة',LOCK:'محاولات كثيرة. ننتظر عشر دقائق ثم نحاول مرة أخرى.',SESSION:'انتهت الجلسة. نسجّل الدخول من جديد.',
+  FORBIDDEN:'لا توجد صلاحية لهذا الإجراء.',EXISTS:'اسم المستخدم مستخدم من قبل.',SHORT:'قصير جدًا: اسم المستخدم ٣ أحرف على الأقل، وكلمة المرور ٤.',
+  NOT_FOUND:'غير موجود.',NO_CLASS:'نكتب اسم الصف أولًا.',BAD_KEY:'الرابط غير صالح.',TOO_BIG:'الصورة كبيرة جدًا.'};
+function errMsg(e){const m=(e&&e.message)||'';for(const k in ERR)if(m.includes(k))return ERR[k];return 'تعذّر الاتصال. نتأكد من الإنترنت ثم نحاول مرة أخرى.';}
+if(!LIVE&&!REMOTE){
+  DemoAPI._setup();const a=DemoAPI.login('admin','admin1234').token;
+  DemoAPI.addTeacher(a,{name:'أ. معلم الصف الرابع',username:'teacher',password:'2468',classes:'4A'});
+  DemoAPI.addStudents(a,'4A',[{name:'أحمد',username:'ahmad',password:'1111'},{name:'محمد',username:'mohammed',password:'2222'},{name:'علي',username:'ali',password:'3333'},{name:'يوسف',username:'yousif',password:'4444'}]);
+}
+function logA(p,mode,item,ok,ms){
+  if(!p||!p.student)return;
+  S.logQ.push({token:p.student.token,x:{mode,qid:String(item.id||item.qid||item.q||item.t||item.title||item.rule||'').slice(0,90),s:item.s||'',d:SK[item.k]||'',k:item.k||'',ok:!!ok,ms:ms||0}});
+}
+async function flushLogs(){
+  if(!S.logQ.length)return;
+  const q=S.logQ;S.logQ=[];const by={};q.forEach(e=>(by[e.token]=by[e.token]||[]).push(e));
+  for(const tok of Object.keys(by)){try{await api('logAnswers',tok,by[tok].map(e=>e.x));}catch(e){if(!/SESSION|FORBIDDEN/.test(e.message))S.logQ.push(...by[tok]);}}
+}
+setInterval(flushLogs,60000);
+
+/* ================= صوت وموسيقى ================= */
+let AC;
+function tone(f=440,d=.12,type='sine',v=.15){if(!S.sound)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+d);}catch(e){}}
+const sfx={
+  step:()=>tone(660,.07,'triangle',.08),good:()=>{tone(660,.1);setTimeout(()=>tone(880,.15),90);},bad:()=>tone(180,.25,'sawtooth',.07),
+  coin:()=>{tone(988,.08,'square',.05);setTimeout(()=>tone(1319,.12,'square',.05),70);},
+  star:()=>[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.22,'triangle',.12),i*110)),dice:()=>tone(rnd(300,500),.04,'square',.04),
+};
+const MEL=[0,4,7,9,7,4,2,null,2,5,9,11,9,5,4,null,0,4,7,12,11,7,9,7,5,4,2,4,0,null,null,null];
+const BASS=[0,0,5,5,7,7,0,0];let musStep=0;
+setInterval(()=>{if(!S.music||!S.sound||!$('#s-game').classList.contains('active'))return;const s=musStep++;
+  const m=MEL[s%MEL.length];if(m!=null)tone(523.25*Math.pow(2,m/12),.2,'triangle',.03);
+  if(s%2===0)tone(130.8*Math.pow(2,BASS[(s>>2)%BASS.length]/12),.3,'sine',.07);},230);
+
+/* ================= الشخصيات والشاشات ================= */
+const DEFAULT_CHARS=[{name:'فهد',emoji:'🐬'},{name:'صقر',emoji:'🦉'},{name:'حمد',emoji:'🐢'},{name:'راشد',emoji:'🦩'},{name:'بحر',emoji:'🐙'},{name:'مرجان',emoji:'🦀'}];
+const SEAT_COLORS=['#FF5D73','#22B573','#7B5CFF','#FF9F1C'];
+function setChars(server){S.chars=(server||[]).map(c=>({name:c.name,img:c.img,emoji:'⭐'})).concat(DEFAULT_CHARS);}
+setChars([]);
+function avatarHTML(p,size=''){return `<div class="av ${size}" style="--pc:${p.color||'#16324F'}">${p.img?`<img src="${p.img}" alt="">`:`<span>${p.emoji||'⭐'}</span>`}</div>`;}
+function show(id){window.onkeydown=null;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id==='s-'+id));window.scrollTo(0,0);}
+function stepsWord(n){return n===1?'خطوة واحدة':n===2?'خطوتان':`${N(n)} خطوات`;}
+function openModal(html,wide){$('#mbox').className='mbox'+(wide?' wide':'');$('#mbox').innerHTML=html;$('#modal').classList.add('show');}
+function closeModal(){$('#modal').classList.remove('show');}
+async function showBanner(ic,html,ms=1600){openModal(`<div class="banner-ic">${ic}</div><div class="banner-t">${html}</div>`);await wait(ms);closeModal();}
+function confirmModal(html,yes,no){return new Promise(r=>{openModal(`${html}<div class="mrow"><button class="btn" id="mYes">${yes}</button><button class="btn alt" id="mNo">${no}</button></div>`);
+  $('#mYes').focus();$('#mYes').onclick=()=>{closeModal();r(true);};$('#mNo').onclick=()=>{closeModal();r(false);};});}
+
+/* ================= الدخول ================= */
+function loginForm(P,o){
+  P.innerHTML=`${o.title?`<h2>${o.title}</h2>`:''}${o.sub?`<p class="muted">${o.sub}</p>`:''}
+    <form class="lform" autocomplete="off" novalidate>
+      <label>اسم المستخدم<input class="in big-field" name="u" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+      <label>كلمة المرور<span class="pw"><input class="in big-field" name="p" type="password" dir="ltr"><button type="button" class="eye" aria-label="إظهار كلمة المرور">👁</button></span></label>
+      <p class="err" aria-live="polite"></p>
+      <div class="mrow"><button class="btn big" type="submit">دخول</button>${o.onBack?'<button class="btn alt" type="button" data-back>رجوع</button>':''}</div>
+    </form><p class="muted small">نسيت كلمة المرور؟ نطلب من المعلم إعادة تعيينها.</p>`;
+  const f=P.querySelector('form'),u=f.elements.u,p=f.elements.p,er=f.querySelector('.err'),go=f.querySelector('[type=submit]');
+  try{u.value=localStorage.getItem('island-user')||'';}catch(e){}
+  f.querySelector('.eye').onclick=()=>{p.type=p.type==='password'?'text':'password';};
+  if(o.onBack)f.querySelector('[data-back]').onclick=o.onBack;
+  [u,p].forEach(x=>x.oninput=()=>{er.textContent='';});
+  f.onsubmit=async e=>{e.preventDefault();
+    if(!u.value.trim()){er.textContent='نكتب اسم المستخدم أولًا';u.focus();return;}
+    if(!p.value){er.textContent='نكتب كلمة المرور أولًا';p.focus();return;}
+    go.disabled=true;er.textContent='...';
+    try{const r=await api('login',u.value.trim(),p.value);
+      if(o.studentOnly&&r.role!=='student'){er.textContent='هذا الحساب ليس حساب طالب';go.disabled=false;return;}
+      if(o.exclude&&o.exclude.includes(r.user.id)){er.textContent='هذا الطالب موجود في الغرفة';go.disabled=false;return;}
+      if(!o.studentOnly){try{localStorage.setItem('island-user',u.value.trim());}catch(e){}}
+      er.textContent='';o.onDone(r);}
+    catch(err){er.textContent=errMsg(err);go.disabled=false;p.value='';p.focus();sfx.bad();}};
+  (u.value?p:u).focus();
+}
+function showHome(){show('home');loginForm($('#homeLogin'),{title:'تسجيل الدخول',onDone:r=>r.role==='student'?startStudent(r):openDash(r)});}
+async function startStudent(r){
+  const st={...r.user,token:r.token};
+  try{setChars(await api('characters',st.token));}catch(e){setChars([]);}
+  await afterLogin(st);
+}
+function addStudentModal(){return new Promise(resolve=>{
+  openModal('<div id="addLogin"></div>');
+  loginForm($('#addLogin'),{title:'من ينضم إلى اللعب؟',sub:'يدخل الطالب الثاني باسم المستخدم وكلمة المرور.',studentOnly:true,
+    exclude:S.seats.filter(s=>s.kind==='student').map(s=>s.student.id),
+    onBack:()=>{closeModal();resolve(null);},onDone:r=>{closeModal();resolve({...r.user,token:r.token});}});
+});}
+
+/* ================= الاختبار القبلي والبعدي ================= */
+const CHEERS=['سؤال جديد في رحلتنا!','هيا نفكر معًا!','لنكتشف الإجابة!','سؤال ممتع!','نقرأ بهدوء ثم نختار.','رحلتنا مستمرة!'];
+async function runTest(st,mode){
+  const form=mode==='pre'?TEST_A:TEST_B;show('test');const P=$('#testPanel');
+  await new Promise(r=>{P.innerHTML=`<div class="intro-box"><div class="intro-ic">${mode==='pre'?'⛵🏝️':'🏆⛵'}</div><h2>${mode==='pre'?'رحلة الاستكشاف':'رحلة التحدي الكبرى'}</h2>
+    <p>${esc(st.name)}، ${mode==='pre'?'قبل أن نبدأ اللعب نبحر معًا في رحلة قصيرة':'حان وقت رؤية تقدّمنا! نبحر في رحلة قصيرة'} من ${N(form.length)} سؤالًا في العلوم والرياضيات. في كل سؤال نقرأ بهدوء، ويمكننا الضغط على 🔊 لسماع السؤال.</p>
+    <button class="btn big" id="tGo">⛵ انطلاق</button></div>`;$('#tGo').focus();$('#tGo').onclick=r;});
+  const res=[];
+  for(let i=0;i<form.length;i++){
+    if(i>0&&i%5===0){const msg={5:'قطعنا ربع الرحلة!',10:'وصلنا إلى منتصف الرحلة!',15:'اقتربنا من الجزيرة!'}[i];sfx.star();
+      await new Promise(r=>{P.innerHTML=`<div class="intro-box"><div class="intro-ic">🌟</div><h2>${msg}</h2><p>${'⭐'.repeat(i/5)}</p><button class="btn big" id="tCont">نكمل الإبحار ⛵</button></div>`;$('#tCont').focus();$('#tCont').onclick=r;});}
+    const q=form[i],opts=shuffle([q.a,...q.o]);const t0=Date.now();
+    const ans=await new Promise(r=>{
+      P.innerHTML=`<div class="trip" aria-label="السؤال ${N(i+1)} من ${N(form.length)}">${form.map((_,j)=>`<i class="${j<i?'done':''}">${j===i?'⛵':''}</i>`).join('')}<b>🏝️</b></div>
+      <div class="narr"><span class="mascot" aria-hidden="true">🐬</span><div class="bubble">${pick(CHEERS)}</div><span class="tag">${q.s==='m'?'🔢 رياضيات':'🔬 علوم'}</span><button class="say" id="say" aria-label="قراءة السؤال">🔊</button></div>
+      ${vis(q.v)}<h2 class="qtext">${T(q.q)}</h2>
+      <div class="opts">${opts.map((o,j)=>`<button class="opt" data-j="${j}">${optHTML(o)}</button>`).join('')}</div>`;
+      $('#say').onclick=()=>speak(sayText(q));
+      P.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{P.querySelectorAll('.opt').forEach(x=>x.disabled=true);b.classList.add('picked');tone(784,.08,'triangle',.08);setTimeout(()=>tone(1047,.1,'triangle',.08),80);setTimeout(()=>r(opts[+b.dataset.j]),450);});});
+    try{speechSynthesis.cancel();}catch(e){}
+    res.push({mode,qid:q.id,s:q.s,d:SK[q.k],k:q.k,ok:ans===q.a,ms:Date.now()-t0});
+  }
+  P.innerHTML=`<div class="intro-box"><div class="intro-ic">⏳</div><h2>نحفظ الإجابات...</h2></div>`;
+  let saved=false;for(let t=0;t<3&&!saved;t++){try{await api('logAnswers',st.token,res);saved=true;}catch(e){await wait(1500);}}
+  if(!saved)res.forEach(x=>S.logQ.push({token:st.token,x}));
+  const score=res.filter(x=>x.ok).length;
+  if(mode==='pre')st.didPre=true;else st.didPost=true;
+  st.weak=statusOf(res.map(x=>({mode:'game',skill:x.k,correct:x.ok?1:0}))).weak;
+  await new Promise(r=>{P.innerHTML=`<div class="intro-box"><div class="intro-ic">🏝️🎉</div><h2>وصلنا إلى الجزيرة يا ${esc(st.name)}!</h2>
+    <p>الإجابات الصحيحة: <b>${N(score)}</b> من ${N(form.length)}</p><p style="font-size:2rem">${'⭐'.repeat(Math.max(1,Math.round(score/4)))}</p>${saved?'':'<p class="muted">سنحفظ الإجابات عند عودة الاتصال.</p>'}
+    <button class="btn big" id="tDone">إلى اللعب 🎲</button></div>`;sfx.star();$('#tDone').focus();$('#tDone').onclick=r;});
+}
+
+/* ================= الغرفة (قبل اللعب) ================= */
+async function keyEntry(k){
+  show('login');const P=$('#loginPanel');P.innerHTML='<div class="intro-box"><div class="intro-ic">⛵</div><h2>جاري الدخول...</h2></div>';
+  try{await startStudent(await api('loginKey',k));}
+  catch(e){P.innerHTML=`<div class="intro-box"><div class="intro-ic">😕</div><h2>الرابط غير صالح</h2><p>نطلب من المعلم رابطًا جديدًا، أو ندخل باسم المستخدم وكلمة المرور.</p><button class="btn big" id="kHome">تسجيل الدخول</button></div>`;$('#kHome').onclick=showHome;}
+}
+function readKey(cb){try{if(LIVE&&google.script.url){google.script.url.getLocation(l=>cb(l&&l.parameter&&l.parameter.k));return;}}catch(e){}
+  let k=null;try{k=new URLSearchParams(location.search).get('k');if(k)history.replaceState(null,'',location.pathname);}catch(e){}cb(k);}
+async function afterLogin(st){
+  if(!st.didPre)await runTest(st,'pre');
+  S.me=st;S.seats=[{kind:'student',student:st,ch:0},{kind:'cpu',ch:1},{kind:'cpu',ch:2},{kind:'cpu',ch:3}];
+  renderLobby();show('lobby');
+}
+function nextChar(i,dir){const used=S.seats.map((s,j)=>j===i?-1:s.ch);let c=S.seats[i].ch;for(let t=0;t<S.chars.length;t++){c=(c+dir+S.chars.length)%S.chars.length;if(!used.includes(c))break;}S.seats[i].ch=c;}
+function renderLobby(){
+  const P=$('#lobbyPanel');
+  const pendingPost=S.seats.filter(s=>s.kind==='student'&&s.student.postOpen&&s.student.didPre&&!s.student.didPost);
+  P.innerHTML=`<div class="lobby-top"><h2>غرفة الانطلاق</h2><button class="sbtn" id="logout">تسجيل الخروج</button></div>
+    ${pendingPost.map(s=>`<div class="notice">🏆 ${esc(s.student.name)}: الاختبار البعدي متاح الآن<button class="btn" data-post="${esc(s.student.id)}">بدء الاختبار البعدي</button></div>`).join('')}
+    <div class="pgrid">${S.seats.map((s,i)=>{const c=S.chars[s.ch]||DEFAULT_CHARS[0];const pp={...c,color:SEAT_COLORS[i]};
+      return `<div class="pcard" style="--pc:${SEAT_COLORS[i]}">
+        <div class="chrow"><button class="arrow" data-ch="${i}" data-d="1" aria-label="الشخصية التالية">▶</button>${avatarHTML(pp,'lg')}<button class="arrow" data-ch="${i}" data-d="-1" aria-label="الشخصية السابقة">◀</button></div>
+        <div class="who">${s.kind==='student'?esc(s.student.name):esc(c.name)+' 🤖'}</div><div class="chname">${s.kind==='student'?'الشخصية: '+esc(c.name):'يلعبها الحاسوب'}</div>
+        ${i===0?'':s.kind==='student'?`<button class="linkbtn" data-rm="${i}">إخراج من الغرفة</button>`:`<button class="sbtn" data-add="${i}">➕ إضافة طالب</button>`}
+      </div>`;}).join('')}</div>
+    <h2 class="sec">الإعدادات</h2>
+    <div class="settings">
+      <div><span class="lbl">عدد الجولات</span><div class="seg">${[4,6,10].map(v=>`<button data-set="rounds" data-v="${v}" class="${S.totalRounds===v?'on':''}">${N(v)} جولات</button>`).join('')}</div></div>
+      <div><span class="lbl">المادة</span><div class="seg">${[['both','العلوم والرياضيات'],['m','الرياضيات'],['s','العلوم']].map(([v,l])=>`<button data-set="subject" data-v="${v}" class="${S.subject===v?'on':''}">${l}</button>`).join('')}</div></div>
+      <div><span class="lbl">شكل الأرقام</span><div class="seg"><button data-set="digits" data-v="ar" class="${S.arDigits?'on':''}">١٢٣</button><button data-set="digits" data-v="en" class="${S.arDigits?'':'on'}">123</button></div></div>
+    </div>
+    <div class="startrow"><button class="btn big" id="startBtn">بدء اللعب</button></div>`;
+  P.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{nextChar(+b.dataset.ch,+b.dataset.d);renderLobby();});
+  P.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{S.seats[+b.dataset.rm]={kind:'cpu',ch:S.seats[+b.dataset.rm].ch};renderLobby();});
+  P.querySelectorAll('[data-add]').forEach(b=>b.onclick=async()=>{const i=+b.dataset.add;const st=await addStudentModal();
+    if(st){if(!st.didPre)await runTest(st,'pre');S.seats[i]={kind:'student',student:st,ch:S.seats[i].ch};}
+    renderLobby();show('lobby');});
+  P.querySelectorAll('[data-post]').forEach(b=>b.onclick=async()=>{const s=S.seats.find(x=>x.kind==='student'&&String(x.student.id)===b.dataset.post);await runTest(s.student,'post');renderLobby();show('lobby');});
+  P.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{const k=b.dataset.set,v=b.dataset.v;if(k==='rounds')S.totalRounds=+v;else if(k==='subject')S.subject=v;else S.arDigits=v==='ar';renderLobby();});
+  $('#logout').onclick=async()=>{await flushLogs();S.me=null;S.seats=[];showHome();};
+  $('#startBtn').onclick=startGame;
+}
+
+/* ================= اللوحة ================= */
+const STAR_COST=20,SPACES=28;
+const LAYOUT=['start','blue','q','blue','red','event','blue','q','blue','shop','red','q','event','blue','blue','q','red','blue','event','q','shop','blue','red','q','blue','event','blue','q'];
+const ICONS={start:'🏁',blue:'+3',red:'−3',q:'؟',event:'!',shop:'🛒'};
+const ITEMS={
+  dbl:{ic:'🎲',name:'نرد مزدوج',cost:5,desc:'رمي نردين معًا في هذا الدور'},
+  warp:{ic:'🧭',name:'بوصلة النجمة',cost:15,desc:'الانتقال مباشرة إلى مكان النجمة'},
+  hook:{ic:'🎣',name:'سنارة العملات',cost:8,desc:'أخذ 5 عملات من اللاعب الأغنى'},
+};
+/* ================= العالم ثلاثي الأبعاد ================= */
+let R,scene,camera,clock,cam;
+const TOP=1.2,PA=12.4,PB=8.6;
+const W={spaces:[],tokens:[],ring:null,star:null,starMesh:null,beam:null,dice:null,sea:null,seaBase:null,clouds:[],fx:[],boat:null,boatA:0,labelCache:{}};
+const DICE_UP={1:[0,0,Math.PI/2],6:[0,0,-Math.PI/2],2:[0,0,0],5:[Math.PI,0,0],3:[-Math.PI/2,0,0],4:[Math.PI/2,0,0]};
+const mat=(color,o={})=>new THREE.MeshStandardMaterial({color,flatShading:true,roughness:.8,...o});
+function tween(ms,fn){return new Promise(r=>{const t0=performance.now();const step=now=>{const k=Math.min(1,(now-t0)/ms);fn(k);if(k<1)requestAnimationFrame(step);else r();};requestAnimationFrame(step);});}
+function spacePos(i){const a=Math.PI/2+i*2*Math.PI/SPACES;return new THREE.Vector3(PA*Math.cos(a),TOP,PB*Math.sin(a));}
+const OFFS=[[-.45,-.4],[.45,-.4],[-.45,.42],[.45,.42]];
+function tokenPos(pi,i){const v=spacePos(i);v.x+=OFFS[pi][0];v.z+=OFFS[pi][1];v.y=TOP+.45;return v;}
+function aspectK(){const a=innerWidth/innerHeight;return Math.min(2.4,Math.max(1,1.45/a));}
+function focusOverview(){cam.follow=null;cam.target.set(0,0,1.5);cam.offT.set(0,25,25).multiplyScalar(aspectK());}
+function focusNear(obj){cam.follow=obj;cam.offT.set(0,13.5,15).multiplyScalar(aspectK());}
+
+function init3D(){
+  if(R)return;
+  R=new THREE.WebGLRenderer({antialias:true});
+  R.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  R.shadowMap.enabled=true;R.shadowMap.type=THREE.PCFSoftShadowMap;
+  $('#stage').appendChild(R.domElement);
+  scene=new THREE.Scene();
+  const sc=document.createElement('canvas');sc.width=2;sc.height=256;const sx=sc.getContext('2d');
+  const gr=sx.createLinearGradient(0,0,0,256);gr.addColorStop(0,'#4FC0E3');gr.addColorStop(1,'#D6F5FA');sx.fillStyle=gr;sx.fillRect(0,0,2,256);
+  scene.background=new THREE.CanvasTexture(sc);
+  scene.fog=new THREE.Fog(0xBDEBF3,60,130);
+  camera=new THREE.PerspectiveCamera(42,1,.1,300);
+  cam={target:new THREE.Vector3(0,0,1.5),look:new THREE.Vector3(0,0,1.5),off:new THREE.Vector3(0,34,40),offT:new THREE.Vector3(0,25,25),follow:null};
+  camera.position.set(0,40,48);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x2D5F70,.62));
+  const sun=new THREE.DirectionalLight(0xFFF2D6,.95);sun.position.set(-14,26,12);sun.castShadow=true;
+  sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-22,right:22,top:22,bottom:-22,near:1,far:80});sun.shadow.camera.updateProjectionMatrix();
+  scene.add(sun);
+  buildWorld();
+  window.addEventListener('resize',resize3D);resize3D();
+  clock=new THREE.Clock();requestAnimationFrame(loop);
+}
+function resize3D(){if(!R)return;R.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  if(cam){if(cam.follow)cam.offT.set(0,13.5,15).multiplyScalar(aspectK());else cam.offT.set(0,25,25).multiplyScalar(aspectK());}}
+
+function buildWorld(){
+  // البحر
+  const sg=new THREE.PlaneGeometry(260,260,90,90);sg.rotateX(-Math.PI/2);
+  W.seaBase=Float32Array.from(sg.attributes.position.array);
+  W.sea=new THREE.Mesh(sg,mat(0x1587AD,{roughness:.3,metalness:.15}));W.sea.receiveShadow=true;scene.add(W.sea);
+  // الجزيرة
+  const beach=new THREE.Mesh(new THREE.CylinderGeometry(17.2,20.5,1.4,40),mat(0xF1C98A));beach.scale.z=.74;beach.position.y=.2;beach.receiveShadow=true;scene.add(beach);
+  const top=new THREE.Mesh(new THREE.CylinderGeometry(16,17.2,1.1,40),mat(0xFFDFA0));top.scale.z=.74;top.position.y=TOP-.55;top.receiveShadow=true;scene.add(top);
+  const grass=new THREE.Mesh(new THREE.CylinderGeometry(6.8,7.3,.4,28),mat(0x4CC36B));grass.scale.z=.66;grass.position.y=TOP+.2;grass.receiveShadow=true;scene.add(grass);
+  scene.add(lighthouse());
+  [[-3.6,1.4,.95,0],[3.9,-1.1,1,1],[-2.2,-2.6,.75,2],[2.6,2.4,.7,3],[-14.7,1.8,1.05,.5],[14.8,-1.6,1.1,2.2],[-9,-8.5,.95,1.3],[9.2,-8.4,.9,4],[0,-10.2,.8,2.8]].forEach(a=>scene.add(palm(...a)));
+  // صخور وأصداف
+  for(let k=0;k<14;k++){const a=Math.random()*Math.PI*2,r=rnd(24,48);const m=new THREE.Mesh(new THREE.DodecahedronGeometry(rnd(6,18)/10,0),mat(0x8A9BA8));m.position.set(Math.cos(a)*r,.2,Math.sin(a)*r*.8);m.rotation.set(Math.random()*3,Math.random()*3,0);m.castShadow=true;scene.add(m);}
+  const shellCols=[0xFF9FB0,0xFFF4E0,0xFFD28A];
+  for(let k=0;k<10;k++){const a=Math.random()*Math.PI*2;const m=new THREE.Mesh(new THREE.SphereGeometry(.22,6,4),mat(pick(shellCols)));m.scale.y=.5;m.position.set(Math.cos(a)*16.2,TOP+.02,Math.sin(a)*11.6);scene.add(m);}
+  // غيوم
+  for(let k=0;k<7;k++){const g=new THREE.Group();const cm=mat(0xffffff,{emissive:0x557788,emissiveIntensity:.15});
+    for(let j=0;j<4;j++){const s=new THREE.Mesh(new THREE.IcosahedronGeometry(rnd(12,22)/10,1),cm);s.position.set(j*1.4-2,Math.random()*.6,Math.random()*.8);g.add(s);}
+    g.position.set(rnd(-60,60),rnd(17,24),rnd(-50,-10));W.clouds.push(g);scene.add(g);}
+  // سفينة
+  W.boat=boat();scene.add(W.boat);
+  // النجمة
+  const sh=new THREE.Shape();for(let k=0;k<10;k++){const r=k%2?.45:1,a=k/10*Math.PI*2+Math.PI/2;k?sh.lineTo(Math.cos(a)*r,Math.sin(a)*r):sh.moveTo(Math.cos(a)*r,Math.sin(a)*r);}sh.closePath();
+  const stg=new THREE.ExtrudeGeometry(sh,{depth:.28,bevelEnabled:true,bevelThickness:.08,bevelSize:.06,bevelSegments:1});stg.center();
+  W.star=new THREE.Group();W.starMesh=new THREE.Mesh(stg,new THREE.MeshStandardMaterial({color:0xFFC23D,emissive:0x8A5A00,metalness:.35,roughness:.3}));W.starMesh.castShadow=true;W.star.add(W.starMesh);scene.add(W.star);
+  W.beam=new THREE.Mesh(new THREE.CylinderGeometry(.95,1.2,6,24,1,true),new THREE.MeshBasicMaterial({color:0xFFE07A,transparent:true,opacity:.25,side:THREE.DoubleSide,depthWrite:false}));scene.add(W.beam);
+  // النرد
+  const dm=[1,6,2,5,3,4].map(n=>new THREE.MeshStandardMaterial({map:diceTex(n),roughness:.45}));
+  W.dice=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.4,1.4),dm);W.dice.castShadow=true;W.dice.visible=false;scene.add(W.dice);
+  // حلقة اللاعب الحالي
+  W.ring=new THREE.Mesh(new THREE.TorusGeometry(.62,.08,8,36),new THREE.MeshBasicMaterial({color:0xffffff}));W.ring.rotation.x=Math.PI/2;W.ring.visible=false;scene.add(W.ring);
+}
+function palm(x,z,s=1,rot=0){
+  const g=new THREE.Group(),tm=mat(0x9C6B3F),lm=mat(0x2E9E4F);let y=0;
+  for(let k=0;k<5;k++){const seg=new THREE.Mesh(new THREE.CylinderGeometry(.2-k*.02,.26-k*.02,.72,6),tm);seg.position.set(k*.09,y+.36,0);seg.rotation.z=-.07*k;seg.castShadow=true;g.add(seg);y+=.67;}
+  for(let k=0;k<7;k++){const pv=new THREE.Group();pv.position.set(.42,y,0);pv.rotation.y=k/7*Math.PI*2;
+    const leaf=new THREE.Mesh(new THREE.ConeGeometry(.42,2.7,4),lm);leaf.scale.z=.25;leaf.rotation.z=-(Math.PI/2+.38);leaf.position.x=1.2;leaf.castShadow=true;pv.add(leaf);g.add(pv);}
+  for(let k=0;k<3;k++){const c=new THREE.Mesh(new THREE.SphereGeometry(.16,6,5),mat(0x6B4423));c.position.set(.42+Math.cos(k*2.1)*.25,y-.2,Math.sin(k*2.1)*.25);g.add(c);}
+  g.position.set(x,TOP,z);g.scale.setScalar(s);g.rotation.y=rot;return g;
+}
+function lighthouse(){
+  const g=new THREE.Group(),red=mat(0xFF5D73),white=mat(0xffffff);
+  for(let k=0;k<4;k++){const m=new THREE.Mesh(new THREE.CylinderGeometry(1.05-(k+1)*.12,1.05-k*.12,.9,16),k%2?white:red);m.position.y=.45+k*.9;m.castShadow=true;g.add(m);}
+  const deck=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.12,16),white);deck.position.y=3.66;g.add(deck);
+  const lamp=new THREE.Mesh(new THREE.CylinderGeometry(.42,.42,.6,12),new THREE.MeshStandardMaterial({color:0xFFE07A,emissive:0xFFC23D,emissiveIntensity:.8}));lamp.position.y=4.02;g.add(lamp);
+  const cap=new THREE.Mesh(new THREE.ConeGeometry(.62,.7,12),red);cap.position.y=4.67;cap.castShadow=true;g.add(cap);
+  g.position.set(0,TOP+.4,-.6);return g;
+}
+function boat(){
+  const g=new THREE.Group();
+  const hull=new THREE.Mesh(new THREE.BoxGeometry(2.6,.6,1.1),mat(0x9C6B3F));hull.position.y=.3;g.add(hull);
+  const mast=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,2.6,6),mat(0xffffff));mast.position.y=1.6;g.add(mast);
+  const sh=new THREE.Shape();sh.moveTo(0,0);sh.lineTo(0,2.1);sh.lineTo(1.4,0);sh.closePath();
+  const sail=new THREE.Mesh(new THREE.ShapeGeometry(sh),new THREE.MeshStandardMaterial({color:0xffffff,side:THREE.DoubleSide,flatShading:true}));sail.position.set(.08,.6,0);g.add(sail);
+  g.traverse(o=>{if(o.isMesh)o.castShadow=true;});return g;
+}
+function diceTex(n){
+  const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
+  x.fillStyle='#fff';x.fillRect(0,0,128,128);x.strokeStyle='#D5E0E8';x.lineWidth=8;x.strokeRect(4,4,120,120);
+  const P={1:[[64,64]],2:[[34,34],[94,94]],3:[[30,30],[64,64],[98,98]],4:[[34,34],[94,34],[34,94],[94,94]],5:[[32,32],[96,32],[64,64],[32,96],[96,96]],6:[[36,28],[92,28],[36,64],[92,64],[36,100],[92,100]]};
+  x.fillStyle=n===1?'#FF5D73':'#16324F';P[n].forEach(([a,b])=>{x.beginPath();x.arc(a,b,n===1?18:12,0,7);x.fill();});
+  return new THREE.CanvasTexture(c);
+}
+function labelTex(t){
+  const key=t+(S.arDigits?'a':'e');if(W.labelCache[key])return W.labelCache[key];
+  const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');
+  x.textAlign='center';x.textBaseline='middle';x.direction='ltr';
+  x.font=(t==='start'||t==='shop')?'130px sans-serif':'800 150px "Baloo Bhaijaan 2", Tahoma, sans-serif';
+  x.fillStyle=(t==='q'||t==='start')?'#16324F':'#ffffff';
+  x.shadowColor='rgba(0,0,0,.2)';x.shadowOffsetY=6;
+  x.fillText(N(ICONS[t]),128,(t==='start'||t==='shop')?134:146);
+  const tex=new THREE.CanvasTexture(c);tex.anisotropy=R.capabilities.getMaxAnisotropy();W.labelCache[key]=tex;return tex;
+}
+function buildSpaces(){
+  W.spaces.forEach(g=>scene.remove(g));W.spaces=[];
+  const col={start:0xffffff,blue:0x1FA2C6,red:0xFF5D73,q:0xFFC23D,event:0x7B5CFF,shop:0xFF9F1C};
+  LAYOUT.forEach((t,i)=>{const p=spacePos(i),g=new THREE.Group();g.position.copy(p);
+    const disc=new THREE.Mesh(new THREE.CylinderGeometry(1.15,1.28,.45,28),mat(col[t],{roughness:.5}));disc.position.y=.225;disc.castShadow=true;disc.receiveShadow=true;g.add(disc);
+    const lab=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.9),new THREE.MeshBasicMaterial({map:labelTex(t),transparent:true,depthWrite:false}));lab.rotation.x=-Math.PI/2;lab.position.y=.46;g.add(lab);
+    scene.add(g);W.spaces.push(g);});
+}
+function portraitTex(p){
+  const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');const tex=new THREE.CanvasTexture(c);
+  const draw=img=>{x.clearRect(0,0,256,256);x.fillStyle=p.color;x.beginPath();x.arc(128,128,124,0,7);x.fill();
+    x.fillStyle='#fff';x.beginPath();x.arc(128,128,108,0,7);x.fill();x.save();x.beginPath();x.arc(128,128,108,0,7);x.clip();
+    if(img){const sc=Math.min(212/img.width,212/img.height),w=img.width*sc,h=img.height*sc;x.drawImage(img,128-w/2,128-h/2,w,h);}
+    else{x.font='140px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(p.emoji,128,138);}
+    x.restore();tex.needsUpdate=true;};
+  if(p.img){const im=new Image();im.onload=()=>draw(im);im.src=p.img;draw(null);}else draw(null);
+  return tex;
+}
+function buildTokens(){
+  W.tokens.forEach(g=>scene.remove(g));
+  W.tokens=S.players.map((p,i)=>{const g=new THREE.Group(),m=mat(new THREE.Color(p.color),{roughness:.45,flatShading:false});
+    const base=new THREE.Mesh(new THREE.CylinderGeometry(.34,.42,.2,20),m);base.position.y=.1;
+    const body=new THREE.Mesh(new THREE.CylinderGeometry(.12,.3,.75,16),m);body.position.y=.55;
+    const head=new THREE.Mesh(new THREE.SphereGeometry(.2,14,10),m);head.position.y=.98;
+    [base,body,head].forEach(o=>{o.castShadow=true;g.add(o);});
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:portraitTex(p)}));sp.scale.set(1.4,1.4,1);sp.position.y=2.1;g.add(sp);g.userData.sprite=sp;
+    g.position.copy(tokenPos(i,p.pos));scene.add(g);return g;});
+}
+function coinBurst(p,n){
+  const g=W.tokens[S.players.indexOf(p)];if(!g)return;
+  for(let k=0;k<n;k++){const c=new THREE.Mesh(new THREE.CylinderGeometry(.24,.24,.07,16),new THREE.MeshStandardMaterial({color:0xFFC23D,emissive:0x7A5200,metalness:.5,roughness:.3}));
+    c.rotation.x=Math.PI/2;c.position.copy(g.position);c.position.y+=1;scene.add(c);
+    W.fx.push({m:c,v:new THREE.Vector3((Math.random()-.5)*3,5+Math.random()*2.5,(Math.random()-.5)*3),life:1.1});}
+}
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
+  if(!$('#s-game').classList.contains('active'))return;
+  const pa=W.sea.geometry.attributes.position,b=W.seaBase;
+  for(let i=0;i<pa.count;i++){const x=b[i*3],z=b[i*3+2];pa.array[i*3+1]=Math.sin(x*.18+t*1.2)*.22+Math.cos(z*.21+t)*.18;}
+  pa.needsUpdate=true;
+  W.clouds.forEach((c,i)=>{c.position.x+=dt*(.5+i*.08);if(c.position.x>70)c.position.x=-70;});
+  W.boatA+=dt*.05;W.boat.position.set(Math.cos(W.boatA)*32,Math.sin(t*1.3)*.15,Math.sin(W.boatA)*24-4);W.boat.rotation.y=-W.boatA;W.boat.rotation.z=Math.sin(t*1.1)*.05;
+  W.starMesh.rotation.y+=dt*1.6;W.starMesh.position.y=Math.sin(t*2)*.2;W.beam.material.opacity=.18+Math.sin(t*3)*.07;
+  W.tokens.forEach((g,i)=>{g.userData.sprite.position.y=2.1+Math.sin(t*2+i)*.07;});
+  if(S.cur&&W.ring.visible){const g=W.tokens[S.players.indexOf(S.cur)];if(g){W.ring.position.set(g.position.x,TOP+.48,g.position.z);W.ring.scale.setScalar(1+Math.sin(t*5)*.1);}}
+  W.fx=W.fx.filter(f=>{f.life-=dt;f.v.y-=12*dt;f.m.position.addScaledVector(f.v,dt);f.m.rotation.z+=dt*8;f.m.scale.setScalar(Math.max(.01,Math.min(1,f.life*2)));
+    if(f.life<=0){scene.remove(f.m);f.m.geometry.dispose();return false;}return true;});
+  const ka=1-Math.exp(-dt*2.6),kb=1-Math.exp(-dt*4),kc=1-Math.exp(-dt*5);
+  cam.off.lerp(cam.offT,ka);if(cam.follow)cam.target.copy(cam.follow.position);
+  camera.position.lerp(cam.target.clone().add(cam.off),kb);cam.look.lerp(cam.target,kc);camera.lookAt(cam.look);
+  R.render(scene,camera);
+}
+
+/* ================= بدء اللعبة ================= */
+async function startGame(){
+  if(typeof THREE==='undefined'){openModal(`<div class="banner-t">تعذّر تحميل الرسوم ثلاثية الأبعاد</div><p>نتأكد من الاتصال بالإنترنت ثم نعيد فتح اللعبة.</p><div class="mrow"><button class="btn" onclick="closeModal()">حسنًا</button></div>`);return;}
+  try{await document.fonts.ready;}catch(e){}
+  S.players=S.seats.map((s,i)=>{const c=S.chars[s.ch]||DEFAULT_CHARS[0];
+    return{name:s.kind==='student'?s.student.name:c.name,emoji:c.emoji,img:c.img||null,color:SEAT_COLORS[i],human:s.kind==='student',
+      student:s.kind==='student'?s.student:null,coins:10,stars:0,pos:0,items:[],st:{correct:0,mini:0,earned:0}};});
+  S.round=1;S.starIndex=-1;S.cur=null;S.lastMini=null;
+  $('#legend').innerHTML=`<span><i style="background:var(--blue)"></i>${N('+3')} عملات</span><span><i style="background:var(--coral)"></i>${N('−3')} عملات</span>
+    <span><i style="background:var(--sun)"></i>سؤال ${N('+5')}</span><span><i style="background:var(--violet)"></i>مفاجأة</span><span><i style="background:#FF9F1C"></i>متجر</span><span>⭐ النجمة بـ${N(STAR_COST)} عملة</span>`;
+  show('game');init3D();buildSpaces();buildTokens();await relocateStar(false);renderHud();setMsg('');$('#turnAv').innerHTML='';W.ring.visible=false;focusOverview();
+  gameLoop();
+}
+function renderHud(){
+  $('#hud').innerHTML=S.players.map(p=>`<div class="chip ${S.cur===p?'active':''}" style="--pc:${p.color}">${avatarHTML(p,'sm')}
+    <div class="chip-txt"><b>${esc(p.name)}${p.human?'':' 🤖'}</b><span>⭐ ${N(p.stars)} &nbsp; 🪙 ${N(p.coins)} &nbsp;${p.items.map(k=>ITEMS[k].ic).join('')}</span></div></div>`).join('');
+  $('#roundInfo').textContent=`الجولة ${N(Math.min(S.round,S.totalRounds))} من ${N(S.totalRounds)}`;
+}
+const setMsg=h=>{const m=$('#turnMsg');if(m)m.innerHTML=h;};
+async function moveToken(p){
+  const i=S.players.indexOf(p),g=W.tokens[i],from=g.position.clone(),to=tokenPos(i,p.pos);
+  await tween(270,k=>{g.position.lerpVectors(from,to,k);g.position.y=to.y+Math.sin(k*Math.PI)*1.2;});
+  const sp=W.spaces[p.pos];tween(200,k=>{sp.position.y=TOP-Math.sin(k*Math.PI)*.14;});
+}
+async function relocateStar(animate){
+  const occ=new Set(S.players.map(p=>p.pos));const opts=[];
+  for(let i=1;i<SPACES;i++)if(i!==S.starIndex&&!occ.has(i))opts.push(i);
+  S.starIndex=pick(opts);
+  const to=spacePos(S.starIndex);to.y=TOP+3.6;
+  if(!animate){W.star.position.copy(to);W.beam.position.set(to.x,TOP+3,to.z);W.beam.visible=true;return;}
+  W.beam.visible=false;const from=W.star.position.clone(),prev=cam.follow;
+  cam.follow=W.star;cam.offT.set(0,17,19).multiplyScalar(aspectK());
+  await tween(1500,k=>{const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;W.star.position.lerpVectors(from,to,e);W.star.position.y=to.y+Math.sin(k*Math.PI)*6;});
+  W.beam.position.set(to.x,TOP+3,to.z);W.beam.visible=true;sfx.coin();await wait(600);
+  if(prev)focusNear(prev);else focusOverview();
+}
+function floatText(p,txt,color){
+  const g=W.tokens[S.players.indexOf(p)];if(!g||!camera||!$('#s-game').classList.contains('active'))return;
+  const v=g.position.clone();v.y+=3;v.project(camera);const r=R.domElement.getBoundingClientRect();
+  const f=document.createElement('div');f.className='float';f.textContent=N(txt);f.style.color=color;
+  f.style.left=(r.left+(v.x+1)/2*r.width-30)+'px';f.style.top=(r.top+(1-v.y)/2*r.height-10)+'px';
+  document.body.appendChild(f);setTimeout(()=>f.remove(),1200);
+}
+function addCoins(p,n){const b=p.coins;p.coins=Math.max(0,p.coins+n);const d=p.coins-b;
+  if(d){if(d>0)p.st.earned+=d;floatText(p,(d>0?'+':'−')+Math.abs(d)+' 🪙',d>0?'#0E7C3A':'#C43A4D');if(d>0&&W.tokens.length)coinBurst(p,Math.min(d,6));}renderHud();}
+
+function askQuestion(p,q,time=25){
+  return new Promise(res=>{
+    const opts=shuffle([q.a,...q.o]);const t0=Date.now();
+    openModal(`<div class="qhead"><div class="who">${avatarHTML(p,'sm')}${esc(p.name)}</div><span class="tag">${q.s==='m'?'رياضيات':'علوم'}</span><button class="say" id="say" aria-label="قراءة السؤال">🔊</button></div>
+      <div class="timer"><i id="qbar"></i></div><h2 class="qtext">${T(q.q)}</h2>
+      <div class="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${optHTML(o)}</button>`).join('')}</div><p class="qfeed" id="qfeed" aria-live="polite"></p>`);
+    const bar=$('#qbar');bar.style.transition=`width ${time}s linear`;requestAnimationFrame(()=>requestAnimationFrame(()=>bar.style.width='0%'));
+    let done=false,to;
+    const finish=async i=>{if(done)return;done=true;clearTimeout(to);
+      const btns=[...document.querySelectorAll('#mbox .opt')];btns.forEach((b,j)=>{b.disabled=true;if(opts[j]===q.a)b.classList.add('correct');});
+      const ok=i!=null&&opts[i]===q.a;if(i!=null&&!ok)btns[i].classList.add('wrong');
+      logA(p,'game',q,ok,Date.now()-t0);if(ok)p.st.correct++;
+      $('#qfeed').textContent=ok?`✅ إجابة صحيحة! ${N('+5')} عملات`:(i==null?'⏰ انتهى الوقت. الإجابة الصحيحة باللون الأخضر':'❌ الإجابة الصحيحة باللون الأخضر');
+      ok?sfx.good():sfx.bad();await wait(ok?1300:2300);closeModal();res(ok);};
+    to=setTimeout(()=>finish(null),time*1000);$('#say').onclick=()=>speak(sayText(q));
+    document.querySelectorAll('#mbox .opt').forEach(b=>b.onclick=()=>finish(+b.dataset.i));
+  });
+}
+
+/* ================= الدور ================= */
+async function spinDie(g,v,dx){
+  const d=W.dice;const base=g.position.clone();base.y+=4.3;base.x+=dx;
+  const tg=DICE_UP[v],sgn=()=>Math.random()<.5?-1:1;
+  const spin=[rnd(3,5)*Math.PI*2*sgn(),rnd(2,4)*Math.PI*2*sgn(),rnd(3,5)*Math.PI*2*sgn()];
+  d.visible=true;let last=0;
+  await tween(1100,k=>{const e=Math.pow(1-k,2);d.rotation.set(tg[0]+spin[0]*e,tg[1]+spin[1]*e,tg[2]+spin[2]*e);
+    d.position.set(base.x,base.y+Math.abs(Math.sin(k*Math.PI*3))*(1-k)*1.6,base.z);d.scale.setScalar(Math.min(1,k*5));
+    if(k-last>.08){sfx.dice();last=k;}});
+  tone(720,.14,'triangle',.12);await wait(650);
+  await tween(220,k=>d.scale.setScalar(Math.max(.001,1-k)));d.visible=false;
+}
+async function rollDice(p,count=1){
+  const btn=$('#rollBtn');
+  if(p.human){btn.hidden=false;btn.textContent=count>1?'🎲🎲 رمي النردين':'🎲 رمي النرد';btn.focus();await new Promise(r=>btn.onclick=()=>{btn.onclick=null;r();});btn.hidden=true;}
+  else await wait(700);
+  const g=W.tokens[S.players.indexOf(p)];let total=0;
+  for(let c=0;c<count;c++){const v=rnd(1,6);total+=v;await spinDie(g,v,0);if(count>1)setMsg(`🎲 ${N(v)}`);}
+  return total;
+}
+async function chooseItem(p){
+  if(!p.items.length)return null;
+  if(p.human)return new Promise(r=>{
+    openModal(`<div class="banner-t">استخدام أداة قبل رمي النرد؟</div><div class="item-row">${p.items.map((k,i)=>`<button class="item-btn" data-i="${i}"><span>${ITEMS[k].ic}</span>${ITEMS[k].name}<small>${T(ITEMS[k].desc)}</small></button>`).join('')}</div>
+      <div class="mrow"><button class="btn alt" id="noItem">رمي النرد فقط</button></div>`);
+    document.querySelectorAll('#mbox .item-btn').forEach(b=>b.onclick=()=>{closeModal();r(p.items.splice(+b.dataset.i,1)[0]);});
+    $('#noItem').onclick=()=>{closeModal();r(null);};});
+  let k=null;
+  if(p.items.includes('warp')&&p.coins>=STAR_COST)k='warp';else if(p.items.includes('hook'))k='hook';else if(p.items.includes('dbl')&&Math.random()<.6)k='dbl';
+  if(!k)return null;p.items.splice(p.items.indexOf(k),1);renderHud();
+  await showBanner(ITEMS[k].ic,`${esc(p.name)}: ${ITEMS[k].name}`,1300);return k;
+}
+async function shopVisit(p){
+  if(p.items.length>=3){setMsg('🛒 الحقيبة ممتلئة (٣ أدوات)');await wait(1000);return;}
+  let k=null;
+  if(p.human){k=await new Promise(r=>{
+    openModal(`<div class="banner-ic">🛒</div><div class="banner-t">متجر الجزيرة</div><p class="muted">مع ${esc(p.name)} ${N(p.coins)} عملة</p>
+      <div class="item-row">${Object.entries(ITEMS).map(([key,it])=>`<button class="item-btn" data-k="${key}" ${it.cost>p.coins?'disabled':''}><span>${it.ic}</span>${it.name}<small>${T(it.desc)}</small><b>${N(it.cost)} 🪙</b></button>`).join('')}</div>
+      <div class="mrow"><button class="btn alt" id="noBuy">مغادرة المتجر</button></div>`);
+    document.querySelectorAll('#mbox .item-btn').forEach(b=>b.onclick=()=>{closeModal();r(b.dataset.k);});$('#noBuy').onclick=()=>{closeModal();r(null);};});}
+  else{const opts=Object.keys(ITEMS).filter(x=>p.coins-ITEMS[x].cost>=5);if(opts.length&&Math.random()<.7)k=pick(opts);await wait(700);}
+  if(k){p.coins-=ITEMS[k].cost;p.items.push(k);renderHud();sfx.coin();setMsg(`${ITEMS[k].ic} ${esc(p.name)} اشترى ${ITEMS[k].name}`);await wait(1100);}
+  else setMsg('🛒 المتجر');
+}
+async function warpToStar(p){
+  const i=S.players.indexOf(p),g=W.tokens[i],from=g.position.clone();p.pos=S.starIndex;const to=tokenPos(i,p.pos);
+  sfx.star();await tween(1300,k=>{g.position.lerpVectors(from,to,k);g.position.y=to.y+Math.sin(k*Math.PI)*7;});
+}
+async function starStop(p){
+  if(p.coins<STAR_COST){setMsg(`⭐ هنا النجمة! ثمنها ${N(STAR_COST)} عملة، ومع ${esc(p.name)} ${N(p.coins)} فقط`);await wait(1500);return;}
+  let buy=true;
+  if(p.human)buy=await confirmModal(`<div class="banner-ic">⭐</div><div class="banner-t">${esc(p.name)} وصل إلى النجمة!<br>شراء نجمة مقابل ${N(STAR_COST)} عملة؟</div>`,'شراء النجمة','ليس الآن');
+  else await wait(500);
+  if(buy){p.coins-=STAR_COST;p.stars++;renderHud();sfx.star();await showBanner('🌟',`نجمة جديدة لـ${esc(p.name)}!`,1700);await relocateStar(true);}
+}
+const EVENTS=[
+  {ic:'🌊',t:()=>'موجة حظ! +5 عملات',f:p=>addCoins(p,5)},
+  {ic:'🦀',t:()=>'سرطان البحر أخذ عملتين',f:p=>addCoins(p,-2)},
+  {ic:'🐚',t:()=>'لؤلؤة من البحر! +7 عملات',f:p=>addCoins(p,7)},
+  {ic:'🎁',t:()=>'كل لاعب يهدي عملة واحدة',f:p=>S.players.forEach(o=>{if(o!==p&&o.coins>0){o.coins--;p.coins++;p.st.earned++;}})},
+  {ic:'🔄',t:o=>`تبادل العملات مع ${o.name}`,pre:p=>pick(S.players.filter(x=>x!==p)),f:(p,o)=>{[p.coins,o.coins]=[o.coins,p.coins];}},
+  {ic:'💡',t:()=>`معلومة: ${pick(FACTS)} (+2 عملة)`,f:p=>addCoins(p,2)},
+];
+async function doEvent(p){const ev=pick(EVENTS);const o=ev.pre?ev.pre(p):null;await showBanner(ev.ic,`مفاجأة!<br>${T(ev.t(o))}`,2300);ev.f(p,o);renderHud();sfx.coin();}
+async function landEffect(p){
+  const t=LAYOUT[p.pos];
+  if(t==='blue'){addCoins(p,3);sfx.coin();setMsg(`${esc(p.name)}: ${N('+3')} عملات`);}
+  else if(t==='red'){addCoins(p,-3);sfx.bad();setMsg(`${esc(p.name)}: ${N('−3')} عملات`);}
+  else if(t==='q'){setMsg('سؤال!');let ok;
+    if(p.human)ok=await askQuestion(p,getMCQ(p));
+    else{await wait(900);ok=Math.random()<.65;if(ok)p.st.correct++;setMsg(ok?'أجاب الحاسوب إجابة صحيحة':'أخطأ الحاسوب في الإجابة');}
+    if(ok){addCoins(p,5);sfx.coin();}}
+  else if(t==='event')await doEvent(p);
+  else if(t==='shop')await shopVisit(p);
+  else setMsg('نقطة الانطلاق: استراحة قصيرة');
+  await wait(900);
+}
+async function playerTurn(p){
+  S.cur=p;renderHud();const i=S.players.indexOf(p);
+  W.ring.material.color.set(p.color);W.ring.visible=true;focusNear(W.tokens[i]);
+  $('#turnAv').innerHTML=avatarHTML(p);setMsg(`الدور على <b>${esc(p.name)}</b>${p.human?'':' 🤖'}`);
+  const item=await chooseItem(p);renderHud();
+  if(item==='hook'){const rich=S.players.filter(o=>o!==p).sort((a,b)=>b.coins-a.coins)[0];const n=Math.min(5,rich.coins);rich.coins-=n;addCoins(p,n);
+    await showBanner('🎣',`${esc(p.name)} أخذ ${N(n)} عملات من ${esc(rich.name)}`,1600);}
+  if(item==='warp'){await warpToStar(p);await starStop(p);return;}
+  const n=await rollDice(p,item==='dbl'?2:1);
+  setMsg(`🎲 ${N(n)}: ${esc(p.name)} يتقدم ${stepsWord(n)}`);
+  for(let s=1;s<=n;s++){p.pos=(p.pos+1)%SPACES;sfx.step();await moveToken(p);await wait(40);if(p.pos===S.starIndex&&s<n)await starStop(p);}
+  if(p.pos===S.starIndex)await starStop(p);
+  await landEffect(p);
+}
+async function gameLoop(){
+  while(S.round<=S.totalRounds){
+    S.cur=null;renderHud();W.ring.visible=false;focusOverview();$('#turnAv').innerHTML='';setMsg('');
+    await wait(900);
+    await showBanner('🌴',S.round===S.totalRounds?'الجولة الأخيرة!':`الجولة ${N(S.round)}`,1300);
+    for(const p of S.players)await playerTurn(p);
+    S.cur=null;renderHud();W.ring.visible=false;focusOverview();await wait(700);
+    await showBanner('🎮','وقت اللعبة المصغرة!',1400);
+    await miniRound();flushLogs();
+    S.round++;
+  }
+  await endGame();
+}
+
+/* ================= الألعاب المصغرة ================= */
+const MINIS=[
+  {id:'quiz',name:'سباق الأسئلة',icon:'⚡',how:'الهدف: الإجابة عن أكبر عدد من الأسئلة قبل انتهاء الوقت.',time:30,cpu:[3,9],run:gQuiz},
+  {id:'balloon',name:'فرقعة البالونات',icon:'🎈',how:'الهدف: فرقعة البالونات التي تطابق القاعدة فقط. البالون الخطأ يخصم نقطة.',time:25,cpu:[4,13],prep:drawBalloon,run:gBalloon},
+  {id:'sort',name:'الفرز السريع',icon:'🧺',how:'الهدف: وضع كل بطاقة في مجموعتها الصحيحة. الخطأ يخصم نقطة.',time:25,cpu:[5,13],prep:drawSort,run:gSort},
+  {id:'tf',name:'صح أم خطأ',icon:'✅',how:'الهدف: الحكم بسرعة على كل عبارة: صحيحة أم خاطئة؟',time:25,cpu:[5,12],run:gTF},
+  {id:'mem',name:'بطاقات الذاكرة',icon:'🃏',how:'الهدف: قلب بطاقتين في كل مرة ومطابقة كل بطاقة مع ما يناسبها.',time:50,cpu:[3,8],prep:drawMem,run:gMem},
+];
+const arena=()=>$('#arena');
+function miniIntro(m,c){return new Promise(r=>{
+  $('#s-mini').classList.add('intro');arena().className='arena';
+  arena().innerHTML=`<div class="intro-box"><div class="intro-ic">${m.icon}</div><h2>${m.name}</h2><p>${m.how}</p>${c&&(c.rule||c.title)?`<p class="rule">${T(c.rule||c.title)}</p>`:''}<button class="btn big" id="goMini">متابعة</button></div>`;
+  $('#goMini').focus();$('#goMini').onclick=r;});}
+function miniHandover(p,m){return new Promise(r=>{
+  $('#s-mini').classList.add('intro');arena().className='arena';
+  arena().innerHTML=`<div class="intro-box">${avatarHTML(p,'xl')}<h2>الدور على ${esc(p.name)}</h2><p>${m.icon} ${m.name}</p><button class="btn big" id="goP">بدء اللعبة</button></div>`;
+  $('#goP').focus();$('#goP').onclick=()=>{$('#s-mini').classList.remove('intro');r();};});}
+function runMini(m,p,content){
+  return new Promise(resolve=>{
+    const a=arena();a.innerHTML='';a.className='arena g-'+m.id;
+    $('#miniPlayer').innerHTML=avatarHTML(p,'sm')+`<b>${esc(p.name)}</b>`;
+    let score=0,left=m.time,ended=false;
+    const upd=()=>{$('#miniScore').textContent=N(score);$('#miniTime').textContent=N(left);};upd();
+    const ctx={p,arena:a,content,cleanups:[],get over(){return ended;},get timeLeft(){return left;},add(d){score=Math.max(0,score+d);upd();},finish,
+      log(item,ok,ms){logA(p,'game',item,ok,ms);if(ok)p.st.correct++;}};
+    const iv=setInterval(()=>{left--;upd();if(left<=5&&left>0)tone(880,.05,'square',.04);if(left<=0)finish();},1000);
+    function finish(){if(ended)return;ended=true;clearInterval(iv);ctx.cleanups.forEach(f=>f());
+      a.insertAdjacentHTML('beforeend',`<div class="timeup">${left<=0?'انتهى الوقت!':'أحسنت!'}<br>النقاط: ${N(score)}</div>`);
+      tone(523,.3,'triangle',.1);setTimeout(()=>resolve(score),1800);}
+    m.run(ctx);
+  });
+}
+async function miniRound(){
+  let m;do{m=pick(MINIS);}while(m===S.lastMini);S.lastMini=m;
+  const content=m.prep?m.prep():null;
+  $('#miniTitle').textContent=m.name;$('#miniIcon').textContent=m.icon;$('#miniPlayer').innerHTML='';
+  show('mini');await miniIntro(m,content);
+  const scores=new Map();
+  for(const p of S.players.filter(p=>p.human)){await miniHandover(p,m);const sc=await runMini(m,p,content);scores.set(p,sc);p.st.mini+=sc;}
+  for(const p of S.players.filter(p=>!p.human)){const sc=rnd(...m.cpu);scores.set(p,sc);p.st.mini+=sc;p.st.correct+=Math.round(sc*.8);}
+  await miniResults(scores);show('game');renderHud();
+}
+function miniResults(scores){return new Promise(r=>{
+  $('#s-mini').classList.add('intro');
+  const rows=S.players.map(p=>[p,scores.get(p)]).sort((a,b)=>b[1]-a[1]);
+  const prizes=[10,6,3,1],medals=['🥇','🥈','🥉','4'];let rank=0;
+  rows.forEach(([p,s],i)=>{if(i>0&&s<rows[i-1][1])rank=i;p._rank=rank;p.coins+=prizes[rank];p.st.earned+=prizes[rank];});
+  arena().className='arena';
+  arena().innerHTML=`<div class="intro-box"><h2>النتائج</h2><div class="res-list">${rows.map(([p,s])=>`<div class="res-row"><span class="place">${N(medals[p._rank])}</span>${avatarHTML(p,'sm')}
+    <span class="nm">${esc(p.name)}${p.human?'':' 🤖'}</span><span>${N(s)} نقطة</span><span class="pz">${N('+'+prizes[p._rank])} 🪙</span></div>`).join('')}</div>
+    <button class="btn big" id="backBtn">العودة إلى الجزيرة</button></div>`;
+  sfx.coin();$('#backBtn').focus();$('#backBtn').onclick=()=>{$('#s-mini').classList.remove('intro');r();};});}
+
+function gQuiz(ctx){
+  const p=ctx.p;
+  const next=()=>{if(ctx.over)return;const q=getMCQ(p),opts=shuffle([q.a,...q.o]);const t0=Date.now();
+    ctx.arena.innerHTML=`<span class="tag">${q.s==='m'?'رياضيات':'علوم'}</span><h2 class="qtext">${T(q.q)}</h2><div class="opts" style="max-width:760px">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${optHTML(o)}</button>`).join('')}</div>`;
+    ctx.arena.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(ctx.over)return;const ok=opts[+b.dataset.i]===q.a;
+      ctx.arena.querySelectorAll('.opt').forEach((x,j)=>{x.disabled=true;if(opts[j]===q.a)x.classList.add('correct');});
+      ctx.log(q,ok,Date.now()-t0);if(ok){ctx.add(1);sfx.good();}else{b.classList.add('wrong');sfx.bad();}setTimeout(next,ok?400:1100);});};
+  next();
+}
+function gTF(ctx){
+  const next=()=>{if(ctx.over)return;const q=drawTF();const t0=Date.now();
+    ctx.arena.innerHTML=`<h2 class="tf-st">${T(q.t)}</h2><div class="tf-btns"><button class="tfb yes" data-v="1">✔ صح</button><button class="tfb no" data-v="0">✘ خطأ</button></div><p class="qfeed" aria-live="polite"></p>`;
+    ctx.arena.querySelectorAll('.tfb').forEach(b=>b.onclick=()=>{if(ctx.over)return;ctx.arena.querySelectorAll('.tfb').forEach(x=>x.disabled=true);
+      const ok=+b.dataset.v===q.v;ctx.log(q,ok,Date.now()-t0);if(ok){ctx.add(1);sfx.good();}else sfx.bad();
+      ctx.arena.querySelector('.qfeed').textContent=ok?'✅ صحيح':(q.v?'❌ العبارة صحيحة':'❌ العبارة خاطئة');
+      setTimeout(next,ok?450:1100);});};
+  next();
+}
+function gSort(ctx){
+  const c=ctx.content;let q=shuffle(c.items),i=0,lock=false;
+  ctx.arena.innerHTML=`<p class="rule">${T(c.title)}</p><div class="sort-card" id="sc"></div><div class="bins">${c.bins.map((b,j)=>`<button class="bin" data-j="${j}">${T(b)}</button>`).join('')}</div>`;
+  const sc=ctx.arena.querySelector('#sc');
+  const showCard=()=>{if(i>=q.length){q=shuffle(c.items);i=0;}sc.innerHTML=T(q[i][0]);sc.className='sort-card';void sc.offsetWidth;sc.classList.add('pop');lock=false;};
+  showCard();
+  ctx.arena.querySelectorAll('.bin').forEach(b=>b.onclick=()=>{if(ctx.over||lock)return;lock=true;const ok=+b.dataset.j===q[i][1];
+    ctx.log({qid:'sort:'+c.title+':'+q[i][0],s:c.s,k:c.k},ok);
+    ctx.add(ok?1:-1);(ok?sfx.good:sfx.bad)();sc.classList.add(ok?'ok':'no');i++;setTimeout(()=>{if(!ctx.over)showCard();},ok?260:600);});
+}
+function gBalloon(ctx){
+  const c=ctx.content;const colors=['#FF5D73','#FFC23D','#22B573','#7B5CFF','#1FA2C6','#FF9F1C'];
+  ctx.arena.innerHTML=`<p class="rule">🎯 ${T(c.rule)}</p>`;
+  const spawn=()=>{if(ctx.over)return;const good=Math.random()<.5;const text=pick(good?c.good:c.bad);
+    const b=document.createElement('button');b.className='balloon';b.innerHTML=T(text);
+    b.style.setProperty('--bc',pick(colors));b.style.setProperty('--h',(ctx.arena.clientHeight+200)+'px');
+    b.style.left=rnd(1,Math.max(1,Math.floor(100-12400/Math.max(ctx.arena.clientWidth,300))))+'%';b.style.animationDuration=(rnd(55,78)/10)+'s';
+    b.onclick=()=>{if(b.dataset.done||ctx.over)return;b.dataset.done=1;ctx.log({qid:'balloon:'+c.rule+':'+text,s:c.s,k:c.k},good);
+      if(good){ctx.add(1);sfx.good();b.classList.add('popped');}else{ctx.add(-1);sfx.bad();b.classList.add('bad');}setTimeout(()=>b.remove(),300);};
+    b.addEventListener('animationend',()=>b.remove());ctx.arena.appendChild(b);};
+  spawn();const iv=setInterval(spawn,780);
+  ctx.cleanups.push(()=>{clearInterval(iv);ctx.arena.querySelectorAll('.balloon').forEach(b=>{b.disabled=true;b.style.animationPlayState='paused';});});
+}
+function gMem(ctx){
+  const c=ctx.content;
+  const cards=shuffle(c.pairs.flatMap((pr,k)=>[{k,t:pr[0],side:0},{k,t:pr[1],side:1}]));
+  ctx.arena.innerHTML=`<p class="rule">${T(c.title)}</p><div class="mem">${cards.map((cd,i)=>`<button class="mcard" data-i="${i}" aria-label="بطاقة ${N(i+1)}"><span class="back">؟</span><span class="face s${cd.side}">${T(cd.t)}</span></button>`).join('')}</div>`;
+  let open=[],lock=false,found=0;
+  ctx.arena.querySelectorAll('.mcard').forEach(el=>el.onclick=()=>{
+    if(lock||ctx.over||el.classList.contains('up'))return;
+    el.classList.add('up');open.push(el);sfx.step();
+    if(open.length===2){lock=true;const[a,b]=open;const A=cards[+a.dataset.i],B=cards[+b.dataset.i];const ok=A.k===B.k;
+      if(A.side!==B.side)ctx.log({qid:'mem:'+c.title+':'+(A.side?B.t:A.t),s:c.s,k:c.k},ok);
+      setTimeout(()=>{
+        if(ok){a.classList.add('matched');b.classList.add('matched');ctx.add(1);sfx.good();found++;
+          if(found===c.pairs.length){ctx.add(Math.ceil(ctx.timeLeft/10));ctx.finish();}}
+        else{a.classList.remove('up');b.classList.remove('up');sfx.bad();}
+        open=[];lock=false;},ok?350:950);}
+  });
+}
+
+/* ================= النهاية والنجوم الإضافية ================= */
+async function bonusStars(){
+  focusOverview();await showBanner('🌟','النجوم الإضافية!',1600);
+  const B=[{ic:'🧠',name:'نجمة العالِم',why:'أكثر إجابات صحيحة',f:p=>p.st.correct},{ic:'🎮',name:'نجمة الألعاب',why:'أعلى نقاط في الألعاب المصغرة',f:p=>p.st.mini},{ic:'🪙',name:'نجمة الكنز',why:'أكثر عملات جُمعت في الرحلة',f:p=>p.st.earned}];
+  for(const b of B){const max=Math.max(...S.players.map(b.f));if(max<=0)continue;const w=S.players.filter(p=>b.f(p)===max);w.forEach(p=>p.stars++);renderHud();sfx.star();
+    await showBanner(b.ic,`${b.name}<br><span style="font-size:1.1rem;opacity:.75">${b.why}</span><br>${w.map(p=>esc(p.name)).join(' و')}`,2600);}
+}
+async function endGame(){
+  await bonusStars();
+  const rank=[...S.players].sort((a,b)=>b.stars-a.stars||b.coins-a.coins);
+  $('#winner').textContent=`الفوز لـ${rank[0].name}!`;
+  const order=[1,0,2,3].filter(i=>rank[i]);
+  $('#podium').innerHTML=order.map(i=>{const p=rank[i];return `<div class="pod p${i+1}">${avatarHTML(p,i===0?'xl':'lg')}<div class="nm">${esc(p.name)}</div>
+    <div class="sc"><span>⭐ ${N(p.stars)}</span><span>🪙 ${N(p.coins)}</span><span>🧠 ${N(p.st.correct)}</span></div><div class="blk">${N(i+1)}</div></div>`;}).join('');
+  show('end');sfx.star();flushLogs();
+  const cols=['#FF5D73','#FFC23D','#22B573','#7B5CFF','#3CC6CB'];
+  for(let k=0;k<50;k++){const d=document.createElement('div');d.className='conf';d.style.left=rnd(0,100)+'vw';d.style.background=pick(cols);
+    d.style.animationDuration=(rnd(25,50)/10)+'s';d.style.animationDelay=(rnd(0,15)/10)+'s';document.body.appendChild(d);setTimeout(()=>d.remove(),7000);}
+}
+
+/* ================= لوحة التحكم ================= */
+const pct=a=>a&&a[1]?Math.round(a[0]/a[1]*100):null;
+const tot=m=>Object.values(m||{}).reduce((s,[c,t])=>[s[0]+c,s[1]+t],[0,0]);
+const fmtP=v=>v==null?'—':N(v)+'٪';
+const ROLE={admin:'مدير النظام',teacher:'معلم'};
+function fmtDate(iso){if(!iso)return'لم يدخل بعد';const d=new Date(iso);return N(`${d.getDate()}/${d.getMonth()+1}`)+' '+N(String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'));}
+async function openDash(r){S.tok=r.token;await refreshDash(true);show('teacher');}
+async function refreshDash(first){
+  try{S.td=await api('dashboard',S.tok);}
+  catch(e){alert(errMsg(e));if(/SESSION|FORBIDDEN/.test(e.message))logoutStaff();return;}
+  const cl=S.td.classes,admin=S.td.me.role==='admin';
+  if(first||!(S.dashCls==='__staff'||cl.includes(S.dashCls)))S.dashCls=cl[0]||(admin?'__staff':null);
+  renderDash();
+}
+function logoutStaff(){S.tok=null;S.td=null;S.dashSel=null;showHome();}
+function baseUrl(){return (S.td&&S.td.appUrl)?S.td.appUrl:location.href.split('#')[0].split('?')[0];}
+const linkOf=s=>baseUrl()+'?k='+encodeURIComponent(s.key||'');
+function qrSVG(text){try{if(typeof qrcode==='undefined')return'';const q=qrcode(0,'M');q.addData(text);q.make();return q.createSvgTag(3,2);}catch(e){return'';}}
+function toast(t,c='#0E7C3A'){const n=document.createElement('div');n.className='float';n.style.cssText=`left:50%;top:40%;color:${c}`;n.textContent=t;document.body.appendChild(n);setTimeout(()=>n.remove(),1300);}
+function copyText(t){if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(()=>toast('✅ تم النسخ'),()=>prompt('ننسخ الرابط:',t));else prompt('ننسخ الرابط:',t);}
+function studentRow(s){
+  const a=S.td.agg[s.id]||{pre:{d:{},k:{}},post:{d:{},k:{}},game:{d:{},k:{}},days:0,last:0};
+  const pre=pct(tot(a.pre.d)),post=pct(tot(a.post.d)),game=pct(tot(a.game.d)),n=tot(a.game.d)[1];
+  const weak=Object.keys({...a.pre.k,...a.game.k}).map(k=>{const c=(a.pre.k[k]||[0,0])[0]+(a.game.k[k]||[0,0])[0],t=(a.pre.k[k]||[0,0])[1]+(a.game.k[k]||[0,0])[1];return[k,t?c/t:1,t];})
+    .filter(x=>x[2]>=2&&x[1]<.7).sort((x,y)=>x[1]-y[1]).slice(0,2).map(x=>x[0]);
+  return{s,a,pre,post,game,n,growth:pre!=null&&post!=null?post-pre:null,weak};
+}
+function barHTML(v,color){return `<div class="bar"><i style="width:${v||0}%;background:${color}"></i><em>${fmtP(v)}</em></div>`;}
+function domainBlock(getA){
+  return `<div class="klegend"><span><i style="background:#9FB3C4"></i>القبلي</span><span><i style="background:var(--leaf)"></i>البعدي</span><span><i style="background:var(--sun)"></i>أثناء اللعب</span></div>`+
+    DOMAINS.map(([d,label,sub])=>{const v=m=>pct(getA(m,d));
+      return `<div class="dom"><div class="lbl">${sub==='m'?'🔢':'🔬'} ${label}</div><div class="bars">${barHTML(v('pre'),'#9FB3C4')}${barHTML(v('post'),'var(--leaf)')}${barHTML(v('game'),'var(--sun)')}</div></div>`;}).join('');
+}
+function renderDash(){
+  const D=$('#dash'),td=S.td,admin=td.me.role==='admin',cl=td.classes;
+  D.innerHTML=`<div class="dhead"><h1><img class="dash-logo" src="${LOGO}" alt="">لوحة التحكم</h1>
+    <div class="acts"><span class="who-chip">👤 ${esc(td.me.name)} <small>${ROLE[td.me.role]}</small></span><button class="sbtn" id="dRef">🔄 تحديث</button><button class="sbtn" id="dPw">🔑 كلمة المرور</button><button class="sbtn" id="dOut">خروج</button></div></div>
+  ${(LIVE||REMOTE)?'':'<div class="notice">وضع التجربة: البيانات تُمسح عند إغلاق الصفحة.</div>'}
+  <div class="tabs">${cl.map(c=>`<button data-cls="${esc(c)}" class="${c===S.dashCls?'on':''}" dir="auto">${esc(c)}</button>`).join('')}
+    ${admin?`<button data-cls="__staff" class="${S.dashCls==='__staff'?'on':''}">👥 المعلمون</button>`:''}</div>
+  <div id="dBody"></div>`;
+  D.querySelectorAll('[data-cls]').forEach(b=>b.onclick=()=>{S.dashCls=b.dataset.cls;S.dashSel=null;renderDash();});
+  $('#dRef').onclick=()=>refreshDash();$('#dOut').onclick=logoutStaff;$('#dPw').onclick=changePwModal;
+  if(S.dashCls==='__staff')return renderStaff();
+  const B=$('#dBody');
+  if(!S.dashCls){B.innerHTML=`<div class="dcard"><p>${admin?'لا توجد صفوف بعد. نضيف معلمًا ونحدد صفوفه من تبويب «المعلمون»، أو نضيف طلابًا لصف جديد.':'لم تُسند إليك صفوف بعد. نطلب من مدير النظام إضافتها.'}</p>${admin?'<button class="btn" id="dAdd">➕ إضافة طلاب</button>':''}</div>`;
+    if(admin)$('#dAdd').onclick=()=>addStudentsModal('');return;}
+  const studs=td.students.filter(s=>String(s.class).trim().toLowerCase()===String(S.dashCls).trim().toLowerCase());
+  const rows=studs.map(studentRow),act=rows.filter(r=>r.s.active);
+  const avg=arr=>{const v=arr.filter(x=>x!=null);return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):null;};
+  const sumAgg=(mode,d)=>act.reduce((s,r)=>{const x=r.a[mode].d[d]||[0,0];return[s[0]+x[0],s[1]+x[1]];},[0,0]);
+  const sel=rows.find(r=>r.s.id===S.dashSel),gAvg=avg(act.map(r=>r.growth)),open=!!td.post[S.dashCls];
+  B.innerHTML=`<div class="dcard"><div class="acts">
+    <button class="sbtn" id="dAdd">➕ إضافة طلاب / استيراد من Excel</button><button class="sbtn" id="dCards">🖨️ بطاقات الدخول</button>
+    <button class="sbtn ${open?'on':''}" id="dPost">${open?'✅ الاختبار البعدي مفتوح لهذا الصف':'🔒 فتح الاختبار البعدي لهذا الصف'}</button>
+    <button class="sbtn" id="dLinks">🔗 روابط أولياء الأمور (CSV)</button><button class="sbtn" id="dCsv">⬇️ ملخص الصف (CSV)</button><button class="sbtn" id="dAll">⬇️ كل الإجابات (CSV)</button>
+    ${admin?'<button class="sbtn" id="dChars">🎭 الشخصيات</button>':''}</div></div>
+  <div class="dcard"><div class="kpis">
+    <div class="kpi"><b>${N(act.length)}</b><span>طلاب الصف</span></div>
+    <div class="kpi"><b>${fmtP(avg(act.map(r=>r.pre)))}</b><span>متوسط القبلي (${N(act.filter(r=>r.pre!=null).length)})</span></div>
+    <div class="kpi"><b>${fmtP(avg(act.map(r=>r.post)))}</b><span>متوسط البعدي (${N(act.filter(r=>r.post!=null).length)})</span></div>
+    <div class="kpi"><b class="${(gAvg||0)>=0?'gup':'gdown'}">${gAvg==null?'—':(gAvg>=0?'+':'')+N(gAvg)}</b><span>متوسط النمو (نقاط مئوية)</span></div></div></div>
+  <div class="dcard"><h3>أداء الصف حسب مجالات TIMSS</h3>${domainBlock((m,d)=>sumAgg(m,d))}</div>
+  <div class="dcard"><h3>الطلاب</h3><p class="muted" style="text-align:start">نضغط على اسم الطالب لعرض التفاصيل.</p><div class="twrap"><table class="st"><thead><tr>
+    <th>الاسم</th><th>اسم المستخدم</th><th>آخر دخول</th><th>القبلي</th><th>البعدي</th><th>النمو</th><th>دقة اللعب</th><th>يحتاج دعمًا في</th><th>إجراءات</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr class="row ${r.s.id===S.dashSel?'sel':''} ${r.s.active?'':'off'}" data-sid="${esc(r.s.id)}"><td><b>${esc(r.s.name)}</b>${r.s.active?'':' <small>(معطّل)</small>'}</td>
+    <td dir="ltr" style="text-align:end"><code>${esc(r.s.username)}</code></td><td style="white-space:nowrap">${fmtDate(r.s.lastLogin)}</td>
+    <td>${fmtP(r.pre)}</td><td>${fmtP(r.post)}</td><td class="${r.growth==null?'':r.growth>=0?'gup':'gdown'}">${r.growth==null?'—':(r.growth>=0?'+':'')+N(r.growth)}</td><td>${fmtP(r.game)}</td>
+    <td>${r.weak.map(k=>`<span class="chipk">${SKILLS[k]||k}</span>`).join('')||'—'}</td>
+    <td class="rowacts"><button class="ib" data-act="pw" title="كلمة مرور جديدة" aria-label="كلمة مرور جديدة">🔑</button><button class="ib" data-act="edit" title="تعديل" aria-label="تعديل">✏️</button>
+      <button class="ib" data-act="link" title="نسخ الرابط الخاص" aria-label="نسخ الرابط الخاص">🔗</button><button class="ib" data-act="toggle" title="${r.s.active?'تعطيل الحساب':'تفعيل الحساب'}" aria-label="${r.s.active?'تعطيل الحساب':'تفعيل الحساب'}">${r.s.active?'⛔':'✅'}</button></td></tr>`).join('')||'<tr><td colspan="9">لا يوجد طلاب في هذا الصف بعد.</td></tr>'}
+  </tbody></table></div></div>
+  ${sel?`<div class="dcard"><h3>${esc(sel.s.name)}: التفاصيل</h3>${domainBlock((m,d)=>sel.a[m].d[d])}
+    <h3 style="margin-top:14px">المهارات</h3><div class="twrap"><table class="st"><thead><tr><th>المهارة</th><th>القبلي</th><th>البعدي</th><th>أثناء اللعب</th><th>عدد الإجابات</th></tr></thead><tbody>
+    ${Object.keys(SKILLS).map(k=>{const g=sel.a.game.k[k],pr=sel.a.pre.k[k],po=sel.a.post.k[k];if(!g&&!pr&&!po)return'';
+      return `<tr><td>${SKILLS[k]}</td><td>${fmtP(pct(pr))}</td><td>${fmtP(pct(po))}</td><td>${fmtP(pct(g))}</td><td>${N((g||[0,0])[1])}</td></tr>`;}).join('')}
+    </tbody></table></div></div>`:''}`;
+  B.querySelectorAll('[data-sid]').forEach(tr=>tr.onclick=async e=>{
+    const b=e.target.closest('[data-act]'),st=studs.find(x=>x.id===tr.dataset.sid);
+    if(!b){S.dashSel=S.dashSel===st.id?null:st.id;return renderDash();}
+    const a=b.dataset.act;
+    if(a==='link')return copyText(linkOf(st));
+    if(a==='edit')return editStudentModal(st);
+    if(a==='pw'){if(!confirm(`إنشاء كلمة مرور جديدة لـ${st.name}؟ ستتوقف كلمة المرور القديمة وبطاقته القديمة.`))return;
+      try{const r=await api('resetPassword',S.tok,st.id);await refreshDash();credsModal([r],'كلمة المرور الجديدة');}catch(err){alert(errMsg(err));}return;}
+    if(a==='toggle'){try{await api('updateStudent',S.tok,st.id,{active:!st.active});await refreshDash();}catch(err){alert(errMsg(err));}}
+  });
+  $('#dAdd').onclick=()=>addStudentsModal(S.dashCls);
+  $('#dCards').onclick=()=>cardsModal(studs.filter(s=>s.active));
+  $('#dPost').onclick=async()=>{if(!open&&!confirm(`فتح الاختبار البعدي لطلاب ${S.dashCls}؟ سيظهر لكل طالب قدّم القبلي عند دخوله.`))return;
+    try{await api('setPostOpen',S.tok,S.dashCls,!open);refreshDash();}catch(e){alert(errMsg(e));}};
+  $('#dLinks').onclick=()=>downloadCSV(`links-${S.dashCls}.csv`,[['الاسم','اسم المستخدم','الصف','رابط الدخول'],...studs.filter(s=>s.active).map(x=>[x.name,x.username,x.class,linkOf(x)])]);
+  $('#dCsv').onclick=()=>downloadCSV(`class-${S.dashCls}.csv`,[['الاسم','اسم المستخدم','الصف','آخر دخول','القبلي %','البعدي %','النمو','دقة اللعب %','إجابات اللعب','أيام اللعب',...DOMAINS.flatMap(([d,l])=>[l+' قبلي',l+' بعدي',l+' لعب']),'يحتاج دعمًا في'],
+    ...rows.map(r=>[r.s.name,r.s.username,r.s.class,r.s.lastLogin,r.pre??'',r.post??'',r.growth??'',r.game??'',r.n,r.a.days||0,...DOMAINS.flatMap(([d])=>['pre','post','game'].map(m=>pct(r.a[m].d[d])??'')),r.weak.map(k=>SKILLS[k]).join('، ')])]);
+  $('#dAll').onclick=async()=>{try{const all=(await api('exportAnswers',S.tok)).filter(a=>String(a.class).trim().toLowerCase()===String(S.dashCls).trim().toLowerCase());
+    downloadCSV(`answers-${S.dashCls}.csv`,[['الوقت','الطالب','اسم المستخدم','الصف','النوع','السؤال','المادة','المجال','المهارة','صحيحة','الزمن (ث)'],...all.map(a=>[a.time,a.name,a.username,a.class,a.mode,a.qid,a.subject,a.domain,SKILLS[a.skill]||a.skill,a.correct,Math.round((a.ms||0)/100)/10])]);}catch(e){alert(errMsg(e));}};
+  if(admin)$('#dChars').onclick=charsModal;
+}
+function renderStaff(){
+  const B=$('#dBody'),staff=S.td.teachers;
+  B.innerHTML=`<div class="dcard"><h3>➕ إضافة معلم</h3>
+    <form class="grid-form" id="tForm" novalidate>
+      <label>الاسم<input class="in" name="name" placeholder="أ. محمد أحمد"></label>
+      <label>اسم المستخدم<input class="in" name="username" dir="ltr" placeholder="t.mohammed"></label>
+      <label>كلمة المرور <small>(اختياري)</small><input class="in" name="password" dir="ltr" placeholder="تُنشأ تلقائيًا"></label>
+      <label>الصفوف <small>(نفصل بفاصلة)</small><input class="in" name="classes" placeholder="4A, 4B"></label>
+      <div><button class="btn" type="submit">إضافة المعلم</button><p class="err" id="tErr" aria-live="polite"></p></div>
+    </form></div>
+  <div class="dcard"><h3>المعلمون والمدراء</h3><div class="twrap"><table class="st"><thead><tr><th>الاسم</th><th>اسم المستخدم</th><th>الدور</th><th>الصفوف</th><th>آخر دخول</th><th>إجراءات</th></tr></thead><tbody>
+    ${staff.map(t=>`<tr class="${t.active?'':'off'}"><td><b>${esc(t.name)}</b>${t.active?'':' <small>(معطّل)</small>'}</td><td dir="ltr" style="text-align:end"><code>${esc(t.username)}</code></td><td>${ROLE[t.role]}</td>
+      <td>${t.role==='admin'?'كل الصفوف':(esc(t.classes)||'—')}</td><td style="white-space:nowrap">${fmtDate(t.lastLogin)}</td>
+      <td class="rowacts">${t.role==='teacher'?`<button class="ib" data-t="edit" data-id="${esc(t.id)}" aria-label="تعديل">✏️</button><button class="ib" data-t="pw" data-id="${esc(t.id)}" aria-label="كلمة مرور جديدة">🔑</button>
+        <button class="ib" data-t="toggle" data-id="${esc(t.id)}" aria-label="${t.active?'تعطيل':'تفعيل'}">${t.active?'⛔':'✅'}</button>`:'—'}</td></tr>`).join('')}
+  </tbody></table></div></div>`;
+  const f=$('#tForm');
+  f.onsubmit=async e=>{e.preventDefault();const v=Object.fromEntries(new FormData(f));
+    if(!v.name.trim()||!v.username.trim()){$('#tErr').textContent='نكتب الاسم واسم المستخدم';return;}
+    try{const r=await api('addTeacher',S.tok,v);await refreshDash();
+      openModal(`<div class="banner-ic">👩‍🏫</div><div class="banner-t">تمت إضافة ${esc(r.name)}</div><p>اسم المستخدم: <code dir="ltr">${esc(r.username)}</code><br>كلمة المرور: <code dir="ltr">${esc(r.password)}</code></p><p class="muted">نحتفظ بكلمة المرور الآن؛ لن تظهر مرة أخرى.</p><div class="mrow"><button class="btn" onclick="closeModal()">تم</button></div>`);}
+    catch(err){$('#tErr').textContent=errMsg(err);}};
+  B.querySelectorAll('[data-t]').forEach(b=>b.onclick=async()=>{const t=staff.find(x=>x.id===b.dataset.id),a=b.dataset.t;
+    try{
+      if(a==='toggle'){await api('updateTeacher',S.tok,t.id,{active:!t.active});return refreshDash();}
+      if(a==='pw'){if(!confirm(`إنشاء كلمة مرور جديدة لـ${t.name}؟`))return;const r=await api('resetPassword',S.tok,t.id);
+        openModal(`<div class="banner-ic">🔑</div><div class="banner-t">${esc(t.name)}</div><p>اسم المستخدم: <code dir="ltr">${esc(r.username)}</code><br>كلمة المرور الجديدة: <code dir="ltr">${esc(r.password)}</code></p><div class="mrow"><button class="btn" onclick="closeModal()">تم</button></div>`);return;}
+      if(a==='edit'){openModal(`<h2 class="banner-t">تعديل ${esc(t.name)}</h2><form class="grid-form one" id="eT" novalidate>
+          <label>الاسم<input class="in" name="name" value="${esc(t.name)}"></label><label>اسم المستخدم<input class="in" name="username" dir="ltr" value="${esc(t.username)}"></label>
+          <label>الصفوف <small>(نفصل بفاصلة)</small><input class="in" name="classes" value="${esc(t.classes)}"></label><p class="err" id="eErr"></p>
+          <div class="mrow"><button class="btn" type="submit">حفظ</button><button class="btn alt" type="button" onclick="closeModal()">إلغاء</button></div></form>`,true);
+        $('#eT').onsubmit=async e=>{e.preventDefault();try{await api('updateTeacher',S.tok,t.id,Object.fromEntries(new FormData($('#eT'))));closeModal();refreshDash();}catch(err){$('#eErr').textContent=errMsg(err);}};}
+    }catch(err){alert(errMsg(err));}});
+}
+function classOptions(cur){const cl=S.td.classes;return S.td.me.role==='admin'
+  ?`<input class="in" name="cls" list="clsList" value="${esc(cur||'')}" placeholder="مثال: 4A"><datalist id="clsList">${cl.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>`
+  :`<select class="in" name="cls">${cl.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('')}</select>`;}
+function editStudentModal(st){
+  openModal(`<h2 class="banner-t">تعديل ${esc(st.name)}</h2><form class="grid-form one" id="eS" novalidate>
+    <label>الاسم<input class="in" name="name" value="${esc(st.name)}"></label>
+    <label>اسم المستخدم<input class="in" name="username" dir="ltr" value="${esc(st.username)}"></label>
+    <label>الصف${classOptions(st.class)}</label><p class="err" id="eErr" aria-live="polite"></p>
+    <div class="mrow"><button class="btn" type="submit">حفظ</button><button class="btn alt" type="button" onclick="closeModal()">إلغاء</button></div></form>`,true);
+  $('#eS').onsubmit=async e=>{e.preventDefault();const v=Object.fromEntries(new FormData($('#eS')));
+    if(!v.name.trim()){$('#eErr').textContent='نكتب الاسم';return;}
+    try{await api('updateStudent',S.tok,st.id,{name:v.name,username:v.username,class:v.cls});closeModal();refreshDash();}catch(err){$('#eErr').textContent=errMsg(err);}};
+}
+function changePwModal(){
+  openModal(`<h2 class="banner-t">🔑 تغيير كلمة المرور</h2><form class="grid-form one" id="cP" novalidate>
+    <label>كلمة المرور الحالية<input class="in" name="o" type="password" dir="ltr"></label>
+    <label>كلمة المرور الجديدة<input class="in" name="n" type="password" dir="ltr"></label>
+    <label>تأكيد كلمة المرور الجديدة<input class="in" name="c" type="password" dir="ltr"></label><p class="err" id="cErr" aria-live="polite"></p>
+    <div class="mrow"><button class="btn" type="submit">حفظ</button><button class="btn alt" type="button" onclick="closeModal()">إلغاء</button></div></form>`,true);
+  $('#cP').onsubmit=async e=>{e.preventDefault();const v=Object.fromEntries(new FormData($('#cP')));
+    if(v.n.length<6){$('#cErr').textContent='كلمة المرور الجديدة ٦ أحرف على الأقل';return;}
+    if(v.n!==v.c){$('#cErr').textContent='التأكيد لا يطابق كلمة المرور الجديدة';return;}
+    try{await api('changePassword',S.tok,v.o,v.n);closeModal();toast('✅ تم تغيير كلمة المرور');}catch(err){$('#cErr').textContent=errMsg(err);}};
+}
+function loadXLSX(){return new Promise((res,rej)=>{if(window.XLSX)return res(window.XLSX);const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=()=>res(window.XLSX);s.onerror=rej;document.head.appendChild(s);});}
+const HEADS={name:['الاسم','اسم الطالب','name','student'],username:['اسم المستخدم','username','user'],password:['كلمة المرور','password','pass'],cls:['الصف','class','الفصل']};
+function pickCol(row,keys){for(const k of Object.keys(row)){const kk=String(k).trim().toLowerCase();if(keys.some(x=>kk===x.toLowerCase()))return row[k];}return'';}
+async function readSheetFile(file){
+  const X=await loadXLSX();const wb=X.read(await file.arrayBuffer(),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];
+  return X.utils.sheet_to_json(ws,{defval:''}).map(r=>({name:String(pickCol(r,HEADS.name)).trim(),username:String(pickCol(r,HEADS.username)).trim(),password:String(pickCol(r,HEADS.password)).trim(),cls:String(pickCol(r,HEADS.cls)).trim()})).filter(r=>r.name);
+}
+function addStudentsModal(cur){
+  openModal(`<h2 class="banner-t">➕ إضافة طلاب</h2>
+    <form class="grid-form one" id="aS" novalidate>
+      <label>الصف${classOptions(cur)}</label>
+      <label>الأسماء <small>(اسم في كل سطر. ويمكن إضافة اسم المستخدم وكلمة المرور بعد فاصلة: أحمد، ahmad، 1234)</small><textarea class="names-in" name="names"></textarea></label>
+      <div class="or">أو</div>
+      <label>استيراد من ملف Excel أو CSV <small>(الأعمدة: الاسم، اسم المستخدم، كلمة المرور، الصف — المطلوب الاسم فقط)</small><input type="file" name="file" accept=".xlsx,.xls,.csv"></label>
+      <button type="button" class="linkbtn" id="tmpl">⬇️ تنزيل نموذج Excel جاهز</button>
+      <p class="err" id="aErr" aria-live="polite"></p>
+      <div class="mrow"><button class="btn" type="submit" id="aGo">إنشاء الحسابات</button><button class="btn alt" type="button" onclick="closeModal()">إلغاء</button></div>
+    </form>`,true);
+  $('#tmpl').onclick=()=>downloadCSV('students-template.csv',[['الاسم','اسم المستخدم','كلمة المرور','الصف'],['أحمد علي','','',cur||'4A'],['محمد حسن','mohammed4a','5678',cur||'4A']]);
+  const f=$('#aS');
+  f.onsubmit=async e=>{e.preventDefault();const er=$('#aErr');er.textContent='';
+    const cls=String(f.elements.cls.value||'').trim();
+    let list=f.elements.names.value.split('\n').map(l=>l.split(/[,\t،]/).map(x=>x.trim())).filter(a=>a[0]).map(a=>({name:a[0],username:a[1]||'',password:a[2]||'',cls:''}));
+    const file=f.elements.file.files[0];
+    if(file){try{list=list.concat(await readSheetFile(file));}catch(err){er.textContent='تعذّرت قراءة الملف. نتأكد أنه Excel أو CSV.';return;}}
+    if(!list.length){er.textContent='نكتب اسمًا واحدًا على الأقل أو نختار ملفًا';return;}
+    const groups={};list.forEach(r=>{const c=r.cls||cls;(groups[c]=groups[c]||[]).push(r);});
+    if(groups['']){er.textContent='نكتب اسم الصف أولًا';return;}
+    $('#aGo').disabled=true;er.textContent='...';
+    try{let out=[];for(const c of Object.keys(groups))out=out.concat(await api('addStudents',S.tok,c,groups[c]));
+      S.dashCls=Object.keys(groups)[0];await refreshDash();credsModal(out,`تم إنشاء ${N(out.length)} حسابًا`);}
+    catch(err){er.textContent=errMsg(err);$('#aGo').disabled=false;}};
+}
+function credsModal(list,title){
+  openModal(`<div class="noprint"><h2 class="banner-t">${title}</h2><p class="muted">كلمات المرور تظهر الآن فقط. نطبع البطاقات أو ننزّل الملف قبل الإغلاق.</p>
+    <div class="twrap"><table class="st"><thead><tr><th>الاسم</th><th>الصف</th><th>اسم المستخدم</th><th>كلمة المرور</th></tr></thead><tbody>
+    ${list.map(s=>`<tr><td>${esc(s.name)}</td><td>${esc(s.class)}</td><td dir="ltr" style="text-align:end"><code>${esc(s.username)}</code></td><td dir="ltr" style="text-align:end"><code>${esc(s.password)}</code></td></tr>`).join('')}</tbody></table></div>
+    <div class="mrow"><button class="btn" id="cPrint">🖨️ طباعة البطاقات</button><button class="btn alt" id="cCsv">⬇️ تنزيل (CSV)</button><button class="btn alt" onclick="closeModal()">إغلاق</button></div></div>`,true);
+  $('#cPrint').onclick=()=>cardsModal(list);
+  $('#cCsv').onclick=()=>downloadCSV('accounts.csv',[['الاسم','الصف','اسم المستخدم','كلمة المرور','رابط الدخول'],...list.map(s=>[s.name,s.class,s.username,s.password,s.key?linkOf(s):''])]);
+}
+function cardsModal(list){
+  openModal(`<div class="noprint"><h2 class="banner-t">بطاقات الدخول</h2><p class="muted">نطبع البطاقات ونقصّها. يدخل الطالب باسم المستخدم وكلمة المرور، أو يمسح رمز QR بكاميرا الجهاز.${list.some(s=>!s.password)?' كلمات المرور لا تُحفظ بشكل مقروء، لذلك نكتبها بخط اليد أو ننشئ كلمات جديدة.':''}</p>
+    <div class="mrow"><button class="btn" onclick="window.print()">🖨️ طباعة</button><button class="btn alt" onclick="closeModal()">إغلاق</button></div></div>
+    <div class="print-area"><div class="cards-print">${list.map(s=>`<div class="lcard"><div class="lc-top"><img class="card-logo" src="${LOGO}" alt=""><span>🏝️ جزيرة التحدي</span></div><b>${esc(s.name)}</b>
+      <div class="lc-row">${s.key?`<div class="qr">${qrSVG(linkOf(s))}</div>`:''}<div class="lc-cred"><div>الصف: <span dir="auto">${esc(s.class)}</span></div>
+        <div>اسم المستخدم:</div><code dir="ltr">${esc(s.username)}</code><div>كلمة المرور:</div><code dir="ltr">${s.password?esc(s.password):'__________'}</code></div></div>
+      ${s.key?'<small>📷 أو نمسح الرمز بكاميرا الجهاز للدخول مباشرة</small>':''}</div>`).join('')}</div></div>`,true);
+}
+function downloadCSV(name,rows){
+  const csv='\uFEFF'+rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),500);
+}
+function charsModal(){
+  const ch=S.td.characters||[];
+  openModal(`<h2 class="banner-t">شخصيات اللعبة</h2><p class="muted">الشخصيات المرفوعة هنا تظهر لكل الطلاب. الأفضل صورة PNG بخلفية شفافة.</p>
+    <div class="charlist">${ch.map(c=>`<div>${avatarHTML({img:c.img,color:'#16324F'},'lg')}<b>${esc(c.name)}</b><button class="sbtn danger" data-del="${esc(c.id)}">حذف</button></div>`).join('')||'<p>لا توجد شخصيات مرفوعة بعد.</p>'}</div>
+    <div class="acts" style="align-items:center"><input class="in" id="cName" placeholder="اسم الشخصية"><input type="file" id="cFile" accept="image/*"><button class="btn" id="cGo">رفع الشخصية</button></div>
+    <p class="err" id="cErr"></p><div class="mrow"><button class="btn alt" onclick="closeModal()">إغلاق</button></div>`,true);
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{await api('deleteCharacter',S.tok,b.dataset.del);S.td=await api('dashboard',S.tok);charsModal();});
+  $('#cGo').onclick=async()=>{const f=$('#cFile').files[0],name=$('#cName').value.trim();if(!f||!name){$('#cErr').textContent='نكتب الاسم ونختار صورة.';return;}
+    $('#cGo').disabled=true;try{let img=await resizeImg(f,160,'image/webp');if(img.length>45000)img=await resizeImg(f,120,'image/webp');if(!img.startsWith('data:image/webp'))img=await resizeImg(f,110,'image/png');
+      await api('saveCharacter',S.tok,name,img);S.td=await api('dashboard',S.tok);charsModal();}catch(e){$('#cErr').textContent=errMsg(e);$('#cGo').disabled=false;}};
+}
+function resizeImg(file,max,type='image/png'){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL(type,.85));};im.onerror=rej;im.src=r.result;};r.onerror=rej;r.readAsDataURL(file);});}
+
+/* ================= تشغيل ================= */
+$('#soundBtn').onclick=()=>{S.sound=!S.sound;$('#soundBtn').textContent=S.sound?'🔊':'🔇';};
+$('#musicBtn').onclick=()=>{S.music=!S.music;$('#musicBtn').style.opacity=S.music?1:.45;};
+$('#againBtn').onclick=async()=>{await flushLogs();renderLobby();show('lobby');};
+if(!LIVE&&!REMOTE)$('#demoNote').hidden=false;
+showHome();
+readKey(k=>{if(k)keyEntry(k);});
+window.addEventListener('beforeunload',()=>{if(S.logQ.length)flushLogs();});
+
+</script>
+</body></html>
